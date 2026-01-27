@@ -3,14 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crowd Code Canvas</title>
+    <title>Crowd Code Canvas | Physics Simulation</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
-        <h1>Welcome to Crowd Code</h1>
-        <p>This canvas is collaboratively built by the community.</p>
-        <p>Pay SOL to have AI make changes to this page.</p>
+        <header class="header">
+            <h1>CROWD_CODE_CANVAS</h1>
+            <div class="subtitle">[ COLLABORATIVE PHYSICS SIMULATION ]</div>
+            <div class="system-info">
+                <span>SYSTEM: ACTIVE</span>
+                <span>PARTICLES: <span id="particle-count">0</span></span>
+                <span>FPS: <span id="fps-counter">60</span></span>
+            </div>
+        </header>
+
+        <div class="simulation-container">
+            <pre id="ascii-canvas" class="ascii-display"></pre>
+        </div>
+
+        <div class="info-panel">
+            <div class="info-block">
+                <h3>PROTOCOL</h3>
+                <p>This canvas operates as a distributed system where community contributions modify the underlying simulation parameters through SOL transactions.</p>
+            </div>
+            <div class="info-block">
+                <h3>PARAMETERS</h3>
+                <div class="param-grid">
+                    <span>GRAVITY: <span id="gravity-val">9.81</span></span>
+                    <span>FRICTION: <span id="friction-val">0.95</span></span>
+                    <span>ELASTICITY: <span id="elastic-val">0.8</span></span>
+                    <span>FIELD_SIZE: <span id="field-size">80x24</span></span>
+                </div>
+            </div>
+        </div>
     </div>
     <script src="script.js"></script>
 </body>
