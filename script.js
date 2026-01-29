@@ -5,7 +5,7 @@ class PhysicsSimulation {
         this.height = 24;
         this.particles = [];
         this.canvas = document.getElementById('ascii-canvas');
-        this.gravity = 0.2;
+        this.gravity = 0.01;
         this.friction = 0.99;
         this.elasticity = 0.8;
         
