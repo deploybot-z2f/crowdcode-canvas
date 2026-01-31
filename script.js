@@ -16,6 +16,24 @@ class PhysicsSimulation {
         // Update system info
         this.updateSystemInfo();
         setInterval(() => this.updateSystemInfo(), 1000);
+        
+        // Setup gravity slider
+        this.setupGravityControl();
+    }
+    
+    setupGravityControl() {
+        const gravitySlider = document.getElementById('gravity-slider');
+        const gravityValue = document.getElementById('gravity-val');
+        
+        gravitySlider.addEventListener('input', (e) => {
+            const sliderValue = parseFloat(e.target.value);
+            this.gravity = sliderValue * 0.02; // Scale to appropriate physics value
+            gravityValue.textContent = sliderValue.toFixed(2);
+        });
+        
+        // Initialize with current value
+        gravitySlider.value = this.gravity * 50;
+        gravityValue.textContent = (this.gravity * 50).toFixed(2);
     }
     
     initializeParticles() {
@@ -134,7 +152,6 @@ class PhysicsSimulation {
     
     updateSystemInfo() {
         document.getElementById('particle-count').textContent = this.particles.length;
-        document.getElementById('gravity-val').textContent = (this.gravity * 50).toFixed(2);
         document.getElementById('friction-val').textContent = this.friction.toFixed(3);
         document.getElementById('elastic-val').textContent = this.elasticity.toFixed(2);
         document.getElementById('field-size').textContent = `${this.width}x${this.height}`;
