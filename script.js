@@ -17,11 +17,12 @@ class PhysicsSimulation {
         this.updateSystemInfo();
         setInterval(() => this.updateSystemInfo(), 1000);
         
-        // Setup gravity slider
-        this.setupGravityControl();
+        // Setup parameter controls
+        this.setupParameterControls();
     }
     
-    setupGravityControl() {
+    setupParameterControls() {
+        // Gravity slider
         const gravitySlider = document.getElementById('gravity-slider');
         const gravityValue = document.getElementById('gravity-val');
         
@@ -31,9 +32,33 @@ class PhysicsSimulation {
             gravityValue.textContent = sliderValue.toFixed(2);
         });
         
-        // Initialize with current value
+        // Friction slider
+        const frictionSlider = document.getElementById('friction-slider');
+        const frictionValue = document.getElementById('friction-val');
+        
+        frictionSlider.addEventListener('input', (e) => {
+            this.friction = parseFloat(e.target.value);
+            frictionValue.textContent = this.friction.toFixed(3);
+        });
+        
+        // Elasticity slider
+        const elasticitySlider = document.getElementById('elasticity-slider');
+        const elasticityValue = document.getElementById('elastic-val');
+        
+        elasticitySlider.addEventListener('input', (e) => {
+            this.elasticity = parseFloat(e.target.value);
+            elasticityValue.textContent = this.elasticity.toFixed(2);
+        });
+        
+        // Initialize with current values
         gravitySlider.value = this.gravity * 50;
         gravityValue.textContent = (this.gravity * 50).toFixed(2);
+        
+        frictionSlider.value = this.friction;
+        frictionValue.textContent = this.friction.toFixed(3);
+        
+        elasticitySlider.value = this.elasticity;
+        elasticityValue.textContent = this.elasticity.toFixed(2);
     }
     
     initializeParticles() {
@@ -152,8 +177,6 @@ class PhysicsSimulation {
     
     updateSystemInfo() {
         document.getElementById('particle-count').textContent = this.particles.length;
-        document.getElementById('friction-val').textContent = this.friction.toFixed(3);
-        document.getElementById('elastic-val').textContent = this.elasticity.toFixed(2);
         document.getElementById('field-size').textContent = `${this.width}x${this.height}`;
         
         // Simulate FPS counter
