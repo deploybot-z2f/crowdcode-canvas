@@ -7,7 +7,7 @@
 body {
     font-family: 'Courier New', monospace;
     background: #0a0a0a;
-    color: #00ffff;
+    color: #1e3a8a;
     min-height: 100vh;
     overflow-x: hidden;
     line-height: 1.2;
@@ -22,7 +22,7 @@ body {
 .header {
     text-align: center;
     margin-bottom: 30px;
-    border-bottom: 2px solid #00ffff;
+    border-bottom: 2px solid #1e3a8a;
     padding-bottom: 20px;
 }
 
@@ -30,14 +30,14 @@ h1 {
     font-size: 2.5rem;
     font-weight: bold;
     letter-spacing: 3px;
-    color: #dc143c;
-    text-shadow: 0 0 10px #dc143c;
+    color: #1e40af;
+    text-shadow: 0 0 10px #1e40af;
     margin-bottom: 10px;
 }
 
 .subtitle {
     font-size: 1rem;
-    color: #00ffff;
+    color: #1e3a8a;
     letter-spacing: 2px;
     margin-bottom: 15px;
 }
@@ -47,7 +47,7 @@ h1 {
     justify-content: center;
     gap: 30px;
     font-size: 0.8rem;
-    color: #00ffff;
+    color: #1e3a8a;
 }
 
 .system-info span {
@@ -68,12 +68,12 @@ h1 {
     font-family: 'Courier New', monospace;
     font-size: 1.4rem;
     line-height: 1;
-    color: #dc143c;
+    color: #1e40af;
     background: transparent;
     white-space: pre;
     overflow: hidden;
     min-height: 400px;
-    text-shadow: 0 0 5px #dc143c;
+    text-shadow: 0 0 5px #1e40af;
 }
 
 .info-panel {
@@ -90,15 +90,15 @@ h1 {
 }
 
 .info-block h3 {
-    color: #dc143c;
+    color: #1e40af;
     font-size: 1.1rem;
     margin-bottom: 15px;
     letter-spacing: 1px;
-    text-shadow: 0 0 5px #dc143c;
+    text-shadow: 0 0 5px #1e40af;
 }
 
 .info-block p {
-    color: #00ffff;
+    color: #1e3a8a;
     font-size: 0.9rem;
     line-height: 1.4;
 }
@@ -107,7 +107,7 @@ h1 {
     display: grid;
     grid-template-columns: 1fr;
     gap: 10px;
-    color: #00ffff;
+    color: #1e3a8a;
     font-size: 0.8rem;
 }
 
@@ -140,19 +140,19 @@ h1 {
     width: 12px;
     height: 12px;
     border-radius: 50%;
-    background: #dc143c;
+    background: #1e40af;
     cursor: pointer;
-    box-shadow: 0 0 5px #dc143c;
+    box-shadow: 0 0 5px #1e40af;
 }
 
 .param-slider::-moz-range-thumb {
     width: 12px;
     height: 12px;
     border-radius: 50%;
-    background: #dc143c;
+    background: #1e40af;
     cursor: pointer;
     border: none;
-    box-shadow: 0 0 5px #dc143c;
+    box-shadow: 0 0 5px #1e40af;
 }
 
 @media (max-width: 768px) {
