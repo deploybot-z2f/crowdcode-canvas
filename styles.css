@@ -64,6 +64,16 @@ h1 {
     position: relative;
 }
 
+.game-instructions {
+    text-align: center;
+    color: #4a90e2;
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+    padding: 10px;
+    background: #0a0a0a;
+    border: 1px solid #333333;
+}
+
 .ascii-display {
     font-family: 'Courier New', monospace;
     font-size: 1.4rem;
@@ -74,6 +84,19 @@ h1 {
     overflow: hidden;
     min-height: 400px;
     text-shadow: 0 0 2px #5a9bd4;
+    border: 1px solid #333333;
+    padding: 10px;
+}
+
+.game-status {
+    text-align: center;
+    color: #5a9bd4;
+    font-size: 1.1rem;
+    margin-top: 15px;
+    padding: 10px;
+    background: #0a0a0a;
+    border: 1px solid #333333;
+    min-height: 30px;
 }
 
 .info-panel {
@@ -101,6 +124,11 @@ h1 {
     color: #4a90e2;
     font-size: 0.9rem;
     line-height: 1.4;
+    margin-bottom: 8px;
+}
+
+.info-block strong {
+    color: #5a9bd4;
 }
 
 .param-grid {
@@ -179,12 +207,26 @@ h1 {
     }
 }
 
-/* Blinking cursor effect */
-.cursor {
+/* Game status animations */
+.game-status.goal {
+    color: #ff6b6b;
+    text-shadow: 0 0 5px #ff6b6b;
+    animation: pulse 0.5s;
+}
+
+.game-status.paused {
+    color: #ffd93d;
+    text-shadow: 0 0 5px #ffd93d;
     animation: blink 1s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
 }
 
 @keyframes blink {
     0%, 50% { opacity: 1; }
-    51%, 100% { opacity: 0; }
+    51%, 100% { opacity: 0.5; }
 }

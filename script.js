@@ -1,130 +1,210 @@
-// Crowd Code Canvas - Physics Simulation
-class PhysicsSimulation {
+// Crowd Code Canvas - ASCII Pong Game
+class PongGame {
     constructor() {
         this.width = 80;
         this.height = 24;
-        this.particles = [];
         this.canvas = document.getElementById('ascii-canvas');
-        this.gravity = 0.01;
-        this.friction = 0.99;
-        this.elasticity = 0.8;
+        this.gameStatus = document.getElementById('game-status');
         
-        this.initializeParticles();
+        // Game state
+        this.paused = false;
+        this.gameRunning = true;
+        
+        // Ball properties
+        this.ball = {
+            x: this.width / 2,
+            y: this.height / 2,
+            vx: 0.8,
+            vy: 0.4,
+            char: '●'
+        };
+        
+        // Paddle properties
+        this.paddleSize = 5;
+        this.playerPaddle = {
+            x: 2,
+            y: Math.floor(this.height / 2) - Math.floor(this.paddleSize / 2),
+            speed: 1
+        };
+        
+        this.aiPaddle = {
+            x: this.width - 3,
+            y: Math.floor(this.height / 2) - Math.floor(this.paddleSize / 2),
+            speed: 0.6
+        };
+        
+        // Score
+        this.playerScore = 0;
+        this.aiScore = 0;
+        
+        // Game parameters
+        this.ballSpeed = 1;
+        this.aiDifficulty = 0.6;
+        
+        this.setupControls();
+        this.setupParameterControls();
         this.updateDisplay();
         this.animate();
-        
-        // Update system info
         this.updateSystemInfo();
         setInterval(() => this.updateSystemInfo(), 1000);
         
-        // Setup parameter controls
-        this.setupParameterControls();
+        this.showMessage("GAME START - Use W/S or ↑/↓ to move");
+    }
+    
+    setupControls() {
+        this.keys = {};
+        
+        document.addEventListener('keydown', (e) => {
+            this.keys[e.key.toLowerCase()] = true;
+            
+            if (e.key === ' ') {
+                e.preventDefault();
+                this.togglePause();
+            }
+            
+            if (e.key.toLowerCase() === 'r') {
+                this.resetGame();
+            }
+        });
+        
+        document.addEventListener('keyup', (e) => {
+            this.keys[e.key.toLowerCase()] = false;
+        });
     }
     
     setupParameterControls() {
-        // Gravity slider
-        const gravitySlider = document.getElementById('gravity-slider');
-        const gravityValue = document.getElementById('gravity-val');
+        // Ball speed slider
+        const speedSlider = document.getElementById('speed-slider');
+        const speedValue = document.getElementById('speed-val');
         
-        gravitySlider.addEventListener('input', (e) => {
-            const sliderValue = parseFloat(e.target.value);
-            this.gravity = sliderValue * 0.02; // Scale to appropriate physics value
-            gravityValue.textContent = sliderValue.toFixed(2);
+        speedSlider.addEventListener('input', (e) => {
+            this.ballSpeed = parseFloat(e.target.value);
+            speedValue.textContent = this.ballSpeed.toFixed(1);
         });
         
-        // Friction slider
-        const frictionSlider = document.getElementById('friction-slider');
-        const frictionValue = document.getElementById('friction-val');
+        // Paddle size slider
+        const paddleSlider = document.getElementById('paddle-slider');
+        const paddleValue = document.getElementById('paddle-val');
         
-        frictionSlider.addEventListener('input', (e) => {
-            this.friction = parseFloat(e.target.value);
-            frictionValue.textContent = this.friction.toFixed(3);
+        paddleSlider.addEventListener('input', (e) => {
+            this.paddleSize = parseInt(e.target.value);
+            paddleValue.textContent = this.paddleSize;
         });
         
-        // Elasticity slider
-        const elasticitySlider = document.getElementById('elasticity-slider');
-        const elasticityValue = document.getElementById('elastic-val');
+        // AI difficulty slider
+        const aiSlider = document.getElementById('ai-slider');
+        const aiValue = document.getElementById('ai-val');
         
-        elasticitySlider.addEventListener('input', (e) => {
-            this.elasticity = parseFloat(e.target.value);
-            elasticityValue.textContent = this.elasticity.toFixed(2);
+        aiSlider.addEventListener('input', (e) => {
+            this.aiDifficulty = parseFloat(e.target.value);
+            this.aiPaddle.speed = this.aiDifficulty;
+            aiValue.textContent = this.aiDifficulty.toFixed(1);
         });
         
-        // Initialize with current values
-        gravitySlider.value = this.gravity * 50;
-        gravityValue.textContent = (this.gravity * 50).toFixed(2);
-        
-        frictionSlider.value = this.friction;
-        frictionValue.textContent = this.friction.toFixed(3);
-        
-        elasticitySlider.value = this.elasticity;
-        elasticityValue.textContent = this.elasticity.toFixed(2);
+        // Initialize values
+        speedValue.textContent = this.ballSpeed.toFixed(1);
+        paddleValue.textContent = this.paddleSize;
+        aiValue.textContent = this.aiDifficulty.toFixed(1);
     }
     
-    initializeParticles() {
-        const particleCount = 15;
-        for (let i = 0; i < particleCount; i++) {
-            this.particles.push({
-                x: Math.random() * (this.width - 2) + 1,
-                y: Math.random() * (this.height - 2) + 1,
-                vx: (Math.random() - 0.5) * 2,
-                vy: (Math.random() - 0.5) * 2,
-                char: ['*', 'o', '+', '#', '@', '%'][Math.floor(Math.random() * 6)],
-                trail: []
-            });
+    togglePause() {
+        this.paused = !this.paused;
+        if (this.paused) {
+            this.showMessage("GAME PAUSED - Press SPACE to continue", "paused");
+        } else {
+            this.showMessage("GAME RESUMED");
         }
     }
     
-    updatePhysics() {
-        this.particles.forEach(particle => {
-            // Apply gravity
-            particle.vy += this.gravity;
-            
-            // Update position
-            particle.x += particle.vx;
-            particle.y += particle.vy;
-            
-            // Store trail
-            particle.trail.push({x: Math.floor(particle.x), y: Math.floor(particle.y)});
-            if (particle.trail.length > 5) {
-                particle.trail.shift();
-            }
-            
-            // Boundary collisions
-            if (particle.x <= 0 || particle.x >= this.width - 1) {
-                particle.vx *= -this.elasticity;
-                particle.x = Math.max(1, Math.min(this.width - 2, particle.x));
-            }
-            
-            if (particle.y <= 0 || particle.y >= this.height - 1) {
-                particle.vy *= -this.elasticity;
-                particle.y = Math.max(1, Math.min(this.height - 2, particle.y));
-            }
-            
-            // Apply friction
-            particle.vx *= this.friction;
-            particle.vy *= this.friction;
-        });
+    resetGame() {
+        this.playerScore = 0;
+        this.aiScore = 0;
+        this.ball.x = this.width / 2;
+        this.ball.y = this.height / 2;
+        this.ball.vx = (Math.random() > 0.5 ? 1 : -1) * 0.8;
+        this.ball.vy = (Math.random() - 0.5) * 0.8;
+        this.playerPaddle.y = Math.floor(this.height / 2) - Math.floor(this.paddleSize / 2);
+        this.aiPaddle.y = Math.floor(this.height / 2) - Math.floor(this.paddleSize / 2);
+        this.showMessage("GAME RESET - Score: 0 - 0");
+    }
+    
+    updatePaddles() {
+        if (this.paused) return;
         
-        // Particle interactions
-        for (let i = 0; i < this.particles.length; i++) {
-            for (let j = i + 1; j < this.particles.length; j++) {
-                const p1 = this.particles[i];
-                const p2 = this.particles[j];
-                const dx = p2.x - p1.x;
-                const dy = p2.y - p1.y;
-                const distance = Math.sqrt(dx * dx + dy * dy);
-                
-                if (distance < 3) {
-                    const force = 0.1;
-                    const angle = Math.atan2(dy, dx);
-                    p1.vx -= Math.cos(angle) * force;
-                    p1.vy -= Math.sin(angle) * force;
-                    p2.vx += Math.cos(angle) * force;
-                    p2.vy += Math.sin(angle) * force;
-                }
+        // Player paddle controls
+        if (this.keys['w'] || this.keys['arrowup']) {
+            this.playerPaddle.y = Math.max(1, this.playerPaddle.y - this.playerPaddle.speed);
+        }
+        if (this.keys['s'] || this.keys['arrowdown']) {
+            this.playerPaddle.y = Math.min(this.height - this.paddleSize - 1, this.playerPaddle.y + this.playerPaddle.speed);
+        }
+        
+        // AI paddle movement
+        const ballCenterY = this.ball.y;
+        const paddleCenterY = this.aiPaddle.y + this.paddleSize / 2;
+        const diff = ballCenterY - paddleCenterY;
+        
+        if (Math.abs(diff) > 0.5) {
+            if (diff > 0) {
+                this.aiPaddle.y = Math.min(this.height - this.paddleSize - 1, this.aiPaddle.y + this.aiPaddle.speed);
+            } else {
+                this.aiPaddle.y = Math.max(1, this.aiPaddle.y - this.aiPaddle.speed);
             }
         }
+    }
+    
+    updateBall() {
+        if (this.paused) return;
+        
+        // Move ball
+        this.ball.x += this.ball.vx * this.ballSpeed;
+        this.ball.y += this.ball.vy * this.ballSpeed;
+        
+        // Top/bottom wall collision
+        if (this.ball.y <= 1 || this.ball.y >= this.height - 2) {
+            this.ball.vy *= -1;
+            this.ball.y = Math.max(1, Math.min(this.height - 2, this.ball.y));
+        }
+        
+        // Player paddle collision
+        if (this.ball.x <= this.playerPaddle.x + 1 && 
+            this.ball.x >= this.playerPaddle.x &&
+            this.ball.y >= this.playerPaddle.y &&
+            this.ball.y <= this.playerPaddle.y + this.paddleSize) {
+            
+            this.ball.vx = Math.abs(this.ball.vx);
+            const relativeY = (this.ball.y - (this.playerPaddle.y + this.paddleSize / 2)) / (this.paddleSize / 2);
+            this.ball.vy = relativeY * 0.6;
+        }
+        
+        // AI paddle collision
+        if (this.ball.x >= this.aiPaddle.x - 1 && 
+            this.ball.x <= this.aiPaddle.x &&
+            this.ball.y >= this.aiPaddle.y &&
+            this.ball.y <= this.aiPaddle.y + this.paddleSize) {
+            
+            this.ball.vx = -Math.abs(this.ball.vx);
+            const relativeY = (this.ball.y - (this.aiPaddle.y + this.paddleSize / 2)) / (this.paddleSize / 2);
+            this.ball.vy = relativeY * 0.6;
+        }
+        
+        // Score detection
+        if (this.ball.x <= 0) {
+            this.aiScore++;
+            this.showMessage(`AI SCORES! Score: ${this.playerScore} - ${this.aiScore}`, "goal");
+            this.resetBall();
+        } else if (this.ball.x >= this.width - 1) {
+            this.playerScore++;
+            this.showMessage(`PLAYER SCORES! Score: ${this.playerScore} - ${this.aiScore}`, "goal");
+            this.resetBall();
+        }
+    }
+    
+    resetBall() {
+        this.ball.x = this.width / 2;
+        this.ball.y = this.height / 2;
+        this.ball.vx = (Math.random() > 0.5 ? 1 : -1) * 0.8;
+        this.ball.vy = (Math.random() - 0.5) * 0.8;
     }
     
     render() {
@@ -134,32 +214,42 @@ class PhysicsSimulation {
         for (let y = 0; y < this.height; y++) {
             frame[y] = [];
             for (let x = 0; x < this.width; x++) {
-                if (x === 0 || x === this.width - 1 || y === 0 || y === this.height - 1) {
-                    frame[y][x] = '█';
+                if (y === 0 || y === this.height - 1) {
+                    frame[y][x] = '═';
+                } else if (x === 0 || x === this.width - 1) {
+                    frame[y][x] = '║';
                 } else {
                     frame[y][x] = ' ';
                 }
             }
         }
         
-        // Draw particle trails
-        this.particles.forEach(particle => {
-            particle.trail.forEach((pos, index) => {
-                if (pos.x > 0 && pos.x < this.width - 1 && pos.y > 0 && pos.y < this.height - 1) {
-                    const trailChars = ['·', '·', '∘', '∘', '○'];
-                    frame[pos.y][pos.x] = trailChars[index] || '·';
-                }
-            });
-        });
-        
-        // Draw particles
-        this.particles.forEach(particle => {
-            const x = Math.floor(particle.x);
-            const y = Math.floor(particle.y);
-            if (x > 0 && x < this.width - 1 && y > 0 && y < this.height - 1) {
-                frame[y][x] = particle.char;
+        // Draw center line
+        for (let y = 1; y < this.height - 1; y++) {
+            if (y % 2 === 0) {
+                frame[y][Math.floor(this.width / 2)] = '┊';
             }
-        });
+        }
+        
+        // Draw paddles
+        for (let i = 0; i < this.paddleSize; i++) {
+            // Player paddle
+            if (this.playerPaddle.y + i >= 0 && this.playerPaddle.y + i < this.height) {
+                frame[this.playerPaddle.y + i][this.playerPaddle.x] = '█';
+            }
+            
+            // AI paddle
+            if (this.aiPaddle.y + i >= 0 && this.aiPaddle.y + i < this.height) {
+                frame[this.aiPaddle.y + i][this.aiPaddle.x] = '█';
+            }
+        }
+        
+        // Draw ball
+        const ballX = Math.floor(this.ball.x);
+        const ballY = Math.floor(this.ball.y);
+        if (ballX > 0 && ballX < this.width - 1 && ballY > 0 && ballY < this.height - 1) {
+            frame[ballY][ballX] = this.ball.char;
+        }
         
         // Convert frame to string
         return frame.map(row => row.join('')).join('\n');
@@ -170,39 +260,47 @@ class PhysicsSimulation {
     }
     
     animate() {
-        this.updatePhysics();
+        this.updatePaddles();
+        this.updateBall();
         this.updateDisplay();
         requestAnimationFrame(() => this.animate());
     }
     
     updateSystemInfo() {
-        document.getElementById('particle-count').textContent = this.particles.length;
+        document.getElementById('player-score').textContent = this.playerScore;
+        document.getElementById('ai-score').textContent = this.aiScore;
         document.getElementById('field-size').textContent = `${this.width}x${this.height}`;
         
         // Simulate FPS counter
         const fps = 58 + Math.floor(Math.random() * 5);
         document.getElementById('fps-counter').textContent = fps;
     }
+    
+    showMessage(message, cssClass = '') {
+        this.gameStatus.textContent = message;
+        this.gameStatus.className = `game-status ${cssClass}`;
+        
+        if (cssClass !== 'paused') {
+            setTimeout(() => {
+                if (this.gameStatus.textContent === message) {
+                    this.gameStatus.textContent = '';
+                    this.gameStatus.className = 'game-status';
+                }
+            }, 3000);
+        }
+    }
 }
 
-// Terminal-style loading sequence
+// Initialize game
 function initializeSystem() {
     console.log('INITIALIZING CROWD CODE CANVAS...');
-    console.log('Loading physics engine...');
-    console.log('Spawning particles...');
+    console.log('Loading PONG game engine...');
+    console.log('Setting up controls...');
     console.log('System ready.');
     
-    new PhysicsSimulation();
+    new PongGame();
 }
 
 document.addEventListener('DOMContentLoaded', () => {
     setTimeout(initializeSystem, 500);
-});
-
-// Add some interactivity
-document.addEventListener('keydown', (e) => {
-    if (e.code === 'Space') {
-        console.log('SPACE pressed - adding particle burst');
-        // Could add new particles here
-    }
 });

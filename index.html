@@ -10,31 +10,39 @@
     <div class="container">
         <header class="header">
             <h1>CROWD CODE CANVAS</h1>
-            <div class="subtitle">[ COLLABORATIVE PHYSICS SIMULATION ]</div>
+            <div class="subtitle">[ INTERACTIVE ASCII PONG ]</div>
             <div class="system-info">
                 <span>SYSTEM: ACTIVE</span>
-                <span>PARTICLES: <span id="particle-count">0</span></span>
+                <span>SCORE: <span id="player-score">0</span> - <span id="ai-score">0</span></span>
                 <span>FPS: <span id="fps-counter">60</span></span>
             </div>
         </header>
 
         <div class="simulation-container">
+            <div class="game-instructions">
+                <p>W/S or ↑/↓ to move paddle • SPACE to pause • R to reset</p>
+            </div>
             <pre id="ascii-canvas" class="ascii-display"></pre>
+            <div class="game-status" id="game-status"></div>
         </div>
 
         <div class="info-panel">
             <div class="info-block">
-                <h3>PROTOCOL</h3>
-                <p>This canvas operates as a distributed system where community contributions modify the underlying simulation parameters through SOL transactions.</p>
-            </div>
-            <div class="info-block">
-                <h3>PARAMETERS</h3>
+                <h3>GAME PARAMETERS</h3>
                 <div class="param-grid">
-                    <span>GRAVITY: <input type="range" id="gravity-slider" min="0" max="2" step="0.01" value="0.5" class="param-slider"> <span id="gravity-val">0.50</span></span>
-                    <span>FRICTION: <input type="range" id="friction-slider" min="0.9" max="1" step="0.001" value="0.99" class="param-slider"> <span id="friction-val">0.990</span></span>
-                    <span>ELASTICITY: <input type="range" id="elasticity-slider" min="0" max="1" step="0.01" value="0.8" class="param-slider"> <span id="elastic-val">0.80</span></span>
+                    <span>BALL_SPEED: <input type="range" id="speed-slider" min="0.5" max="2" step="0.1" value="1" class="param-slider"> <span id="speed-val">1.0</span></span>
+                    <span>PADDLE_SIZE: <input type="range" id="paddle-slider" min="3" max="8" step="1" value="5" class="param-slider"> <span id="paddle-val">5</span></span>
+                    <span>AI_DIFFICULTY: <input type="range" id="ai-slider" min="0.1" max="1" step="0.1" value="0.6" class="param-slider"> <span id="ai-val">0.6</span></span>
                     <span>FIELD_SIZE: <span id="field-size">80x24</span></span>
                 </div>
+            </div>
+            <div class="info-block">
+                <h3>CONTROLS</h3>
+                <p><strong>W/S Keys:</strong> Move paddle up/down</p>
+                <p><strong>Arrow Keys:</strong> Alternative paddle control</p>
+                <p><strong>SPACE:</strong> Pause/Resume game</p>
+                <p><strong>R Key:</strong> Reset game</p>
+                <p><strong>Parameters:</strong> Adjust game physics in real-time</p>
             </div>
         </div>
     </div>
