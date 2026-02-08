@@ -19,6 +19,29 @@ body {
     padding: 20px;
 }
 
+.hello-world {
+    text-align: center;
+    background: #132335;
+    border: 2px solid #5a9bd4;
+    padding: 20px;
+    margin-bottom: 30px;
+    border-radius: 5px;
+}
+
+.hello-world h2 {
+    font-size: 2rem;
+    color: #5a9bd4;
+    text-shadow: 0 0 5px #5a9bd4;
+    margin-bottom: 10px;
+    letter-spacing: 2px;
+}
+
+.hello-world p {
+    color: #4a90e2;
+    font-size: 1.1rem;
+    letter-spacing: 1px;
+}
+
 .header {
     text-align: center;
     margin-bottom: 30px;
@@ -203,6 +226,14 @@ h1 {
     }
     
     .ascii-display {
+        font-size: 1rem;
+    }
+    
+    .hello-world h2 {
+        font-size: 1.5rem;
+    }
+    
+    .hello-world p {
         font-size: 1rem;
     }
 }
