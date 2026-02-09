@@ -40,8 +40,13 @@ class BouncingBall {
     }
     
     draw() {
-        // Clear canvas
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        // Clear canvas with black background
+        this.ctx.fillStyle = '#000000';
+        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+        
+        // Set up glow effect
+        this.ctx.shadowColor = this.ball.color;
+        this.ctx.shadowBlur = 15;
         
         // Draw ball
         this.ctx.beginPath();
@@ -49,10 +54,7 @@ class BouncingBall {
         this.ctx.fillStyle = this.ball.color;
         this.ctx.fill();
         
-        // Add glow effect
-        this.ctx.shadowColor = this.ball.color;
-        this.ctx.shadowBlur = 20;
-        this.ctx.fill();
+        // Reset shadow
         this.ctx.shadowBlur = 0;
     }
     
