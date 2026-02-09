@@ -23,6 +23,7 @@ class SnakeGame {
         document.addEventListener('keydown', (e) => this.handleKeyPress(e));
         
         this.init();
+        this.gameLoop();
     }
     
     init() {
@@ -43,9 +44,10 @@ class SnakeGame {
         this.updateScore();
         this.gameOverScreen.classList.add('hidden');
         
-        this.lastTime = 0;
+        this.lastUpdateTime = 0;
         this.gameSpeed = 100;
-        this.animate(0);
+        
+        this.draw();
     }
     
     generateFood() {
@@ -140,7 +142,6 @@ class SnakeGame {
         this.ctx.fillStyle = '#000000';
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
         
-        this.ctx.fillStyle = '#4ade80';
         this.ctx.shadowColor = '#4ade80';
         this.ctx.shadowBlur = 10;
         
@@ -203,14 +204,15 @@ class SnakeGame {
         this.init();
     }
     
-    animate(currentTime) {
-        requestAnimationFrame((time) => this.animate(time));
+    gameLoop(currentTime = 0) {
+        requestAnimationFrame((time) => this.gameLoop(time));
         
-        if (currentTime - this.lastTime > this.gameSpeed) {
+        if (currentTime - this.lastUpdateTime > this.gameSpeed) {
             this.update();
-            this.draw();
-            this.lastTime = currentTime;
+            this.lastUpdateTime = currentTime;
         }
+        
+        this.draw();
     }
 }
 
