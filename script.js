@@ -3,12 +3,7 @@ class SnakeGame {
         this.canvas = document.getElementById('game-canvas');
         this.ctx = this.canvas.getContext('2d');
         
-        this.canvas.width = 400;
-        this.canvas.height = 400;
-        
-        this.gridSize = 20;
-        this.cols = this.canvas.width / this.gridSize;
-        this.rows = this.canvas.height / this.gridSize;
+        this.initCanvasSize();
         
         this.scoreElement = document.getElementById('score');
         this.highScoreElement = document.getElementById('high-score');
@@ -22,15 +17,106 @@ class SnakeGame {
         this.restartBtn.addEventListener('click', () => this.restart());
         document.addEventListener('keydown', (e) => this.handleKeyPress(e));
         
+        this.initTouchControls();
+        
+        window.addEventListener('resize', () => this.handleResize());
+        
         this.init();
         this.startGameLoop();
     }
     
+    initCanvasSize() {
+        const isMobile = window.innerWidth <= 768;
+        
+        if (isMobile) {
+            const maxWidth = Math.min(window.innerWidth - 40, 400);
+            this.canvas.width = maxWidth;
+            this.canvas.height = maxWidth;
+            this.gridSize = 20;
+        } else {
+            this.canvas.width = 400;
+            this.canvas.height = 400;
+            this.gridSize = 20;
+        }
+        
+        this.cols = this.canvas.width / this.gridSize;
+        this.rows = this.canvas.height / this.gridSize;
+    }
+    
+    handleResize() {
+        const oldCols = this.cols;
+        const oldRows = this.rows;
+        
+        this.initCanvasSize();
+        
+        if (oldCols !== this.cols || oldRows !== this.rows) {
+            this.restart();
+        }
+    }
+    
+    initTouchControls() {
+        let touchStartX = 0;
+        let touchStartY = 0;
+        let touchEndX = 0;
+        let touchEndY = 0;
+        
+        const minSwipeDistance = 30;
+        
+        this.canvas.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            touchStartX = e.changedTouches[0].screenX;
+            touchStartY = e.changedTouches[0].screenY;
+        }, { passive: false });
+        
+        this.canvas.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            touchEndX = e.changedTouches[0].screenX;
+            touchEndY = e.changedTouches[0].screenY;
+            this.handleSwipe(touchStartX, touchStartY, touchEndX, touchEndY, minSwipeDistance);
+        }, { passive: false });
+        
+        this.canvas.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+        }, { passive: false });
+    }
+    
+    handleSwipe(startX, startY, endX, endY, minDistance) {
+        if (!this.gameStarted) {
+            this.gameStarted = true;
+        }
+        
+        if (this.gameOver) return;
+        
+        const deltaX = endX - startX;
+        const deltaY = endY - startY;
+        
+        if (Math.abs(deltaX) < minDistance && Math.abs(deltaY) < minDistance) {
+            return;
+        }
+        
+        if (Math.abs(deltaX) > Math.abs(deltaY)) {
+            if (deltaX > 0 && this.direction.x === 0) {
+                this.nextDirection = { x: 1, y: 0 };
+            } else if (deltaX < 0 && this.direction.x === 0) {
+                this.nextDirection = { x: -1, y: 0 };
+            }
+        } else {
+            if (deltaY > 0 && this.direction.y === 0) {
+                this.nextDirection = { x: 0, y: 1 };
+            } else if (deltaY < 0 && this.direction.y === 0) {
+                this.nextDirection = { x: 0, y: -1 };
+            }
+        }
+    }
+    
     init() {
+        const startX = Math.floor(this.cols / 2);
+        const startY = Math.floor(this.rows / 2);
+        
         this.snake = [
-            { x: 10, y: 10 },
-            { x: 9, y: 10 },
-            { x: 8, y: 10 }
+            { x: startX, y: startY },
+            { x: startX - 1, y: startY },
+            { x: startX - 2, y: startY }
         ];
         
         this.direction = { x: 1, y: 0 };
@@ -177,10 +263,13 @@ class SnakeGame {
         this.ctx.shadowBlur = 0;
         
         if (!this.gameStarted) {
+            const isMobile = window.innerWidth <= 768;
+            const message = isMobile ? 'Swipe to start' : 'Press any arrow key to start';
+            
             this.ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
-            this.ctx.font = '30px Arial';
+            this.ctx.font = isMobile ? '20px Arial' : '24px Arial';
             this.ctx.textAlign = 'center';
-            this.ctx.fillText('Press any arrow key to start', this.canvas.width / 2, this.canvas.height / 2);
+            this.ctx.fillText(message, this.canvas.width / 2, this.canvas.height / 2);
         }
     }
     
