@@ -3,8 +3,8 @@ class SnakeGame {
         this.canvas = document.getElementById('game-canvas');
         this.ctx = this.canvas.getContext('2d');
         
-        this.canvas.width = 800;
-        this.canvas.height = 600;
+        this.canvas.width = 1200;
+        this.canvas.height = 700;
         
         this.gridSize = 20;
         this.cols = this.canvas.width / this.gridSize;
@@ -202,7 +202,7 @@ class SnakeGame {
     
     restart() {
         this.init();
-        this.lastUpdateTime = 0; // Reset the timing for smooth restart
+        this.lastUpdateTime = 0;
     }
     
     startGameLoop() {
