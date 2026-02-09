@@ -3,8 +3,8 @@ class SnakeGame {
         this.canvas = document.getElementById('game-canvas');
         this.ctx = this.canvas.getContext('2d');
         
-        this.canvas.width = 1600;
-        this.canvas.height = 900;
+        this.canvas.width = 2400;
+        this.canvas.height = 1200;
         
         this.gridSize = 20;
         this.cols = this.canvas.width / this.gridSize;
