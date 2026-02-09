@@ -12,39 +12,115 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    padding: 20px;
 }
 
 .container {
     text-align: center;
-    padding: 20px;
+    max-width: 900px;
 }
 
 .header {
-    margin-bottom: 30px;
+    margin-bottom: 20px;
 }
 
 .header h1 {
     font-size: 2.5rem;
-    color: #ff4444;
+    color: #4ade80;
     margin-bottom: 10px;
-    text-shadow: 0 0 10px #ff4444;
+    text-shadow: 0 0 10px #4ade80;
 }
 
 .header p {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     color: #cccccc;
 }
 
+.score-board {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin-bottom: 20px;
+    font-size: 1.3rem;
+    font-weight: bold;
+}
+
+.score {
+    color: #4ade80;
+}
+
+.high-score {
+    color: #fbbf24;
+}
+
 .canvas-container {
+    position: relative;
     border: 2px solid #333333;
     border-radius: 8px;
     background: #0a0a0a;
     padding: 10px;
-    box-shadow: 0 0 20px rgba(255, 68, 68, 0.3);
+    box-shadow: 0 0 20px rgba(74, 222, 128, 0.3);
+    display: inline-block;
 }
 
-#bouncing-canvas {
+#game-canvas {
     display: block;
     background: #000000;
     border-radius: 4px;
+}
+
+.game-over {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.95);
+    padding: 40px 60px;
+    border-radius: 12px;
+    border: 2px solid #ef4444;
+    box-shadow: 0 0 30px rgba(239, 68, 68, 0.5);
+}
+
+.game-over.hidden {
+    display: none;
+}
+
+.game-over h2 {
+    color: #ef4444;
+    font-size: 2rem;
+    margin-bottom: 15px;
+}
+
+.game-over p {
+    font-size: 1.3rem;
+    margin-bottom: 25px;
+    color: #cccccc;
+}
+
+#restart-btn {
+    background: #4ade80;
+    color: #000;
+    border: none;
+    padding: 12px 30px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+#restart-btn:hover {
+    background: #22c55e;
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(74, 222, 128, 0.5);
+}
+
+.instructions {
+    margin-top: 25px;
+    color: #888;
+    font-size: 0.95rem;
+}
+
+.instructions p {
+    margin: 5px 0;
 }
