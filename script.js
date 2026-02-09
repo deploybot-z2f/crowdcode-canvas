@@ -23,7 +23,7 @@ class SnakeGame {
         document.addEventListener('keydown', (e) => this.handleKeyPress(e));
         
         this.init();
-        this.gameLoop();
+        this.startGameLoop();
     }
     
     init() {
@@ -202,17 +202,22 @@ class SnakeGame {
     
     restart() {
         this.init();
+        this.lastUpdateTime = 0; // Reset the timing for smooth restart
     }
     
-    gameLoop(currentTime = 0) {
-        requestAnimationFrame((time) => this.gameLoop(time));
+    startGameLoop() {
+        const gameLoop = (currentTime = 0) => {
+            this.animationFrame = requestAnimationFrame(gameLoop);
+            
+            if (currentTime - this.lastUpdateTime > this.gameSpeed) {
+                this.update();
+                this.lastUpdateTime = currentTime;
+            }
+            
+            this.draw();
+        };
         
-        if (currentTime - this.lastUpdateTime > this.gameSpeed) {
-            this.update();
-            this.lastUpdateTime = currentTime;
-        }
-        
-        this.draw();
+        gameLoop();
     }
 }
 
