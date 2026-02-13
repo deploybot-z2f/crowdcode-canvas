@@ -135,16 +135,6 @@ body {
     transform: scale(0.95);
 }
 
-.instructions {
-    margin-top: 20px;
-    color: #888;
-    font-size: 0.95rem;
-}
-
-.instructions p {
-    margin: 5px 0;
-}
-
 @media (max-width: 768px) {
     body {
         padding: 10px;
@@ -212,15 +202,6 @@ body {
         font-size: 1rem;
         -webkit-tap-highlight-color: transparent;
     }
-
-    .instructions {
-        margin-top: 15px;
-        font-size: 0.85rem;
-    }
-
-    .instructions p {
-        margin: 3px 0;
-    }
 }
 
 @media (max-width: 480px) {
@@ -257,9 +238,5 @@ body {
 
     .game-over p {
         font-size: 1rem;
-    }
-
-    .instructions {
-        font-size: 0.8rem;
     }
 }
