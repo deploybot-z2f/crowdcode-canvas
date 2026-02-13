@@ -29,13 +29,13 @@ class SnakeGame {
         const isMobile = window.innerWidth <= 768;
         
         if (isMobile) {
-            const maxWidth = Math.min(window.innerWidth - 40, 400);
+            const maxWidth = Math.min(window.innerWidth - 40, 480);
             this.canvas.width = maxWidth;
             this.canvas.height = maxWidth;
             this.gridSize = 20;
         } else {
-            this.canvas.width = 400;
-            this.canvas.height = 400;
+            this.canvas.width = 480;
+            this.canvas.height = 480;
             this.gridSize = 20;
         }
         
