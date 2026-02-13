@@ -3,8 +3,6 @@ class SnakeGame {
         this.canvas = document.getElementById('game-canvas');
         this.ctx = this.canvas.getContext('2d');
         
-        this.initCanvasSize();
-        
         this.scoreElement = document.getElementById('score');
         this.highScoreElement = document.getElementById('high-score');
         this.finalScoreElement = document.getElementById('final-score');
@@ -21,26 +19,20 @@ class SnakeGame {
         
         window.addEventListener('resize', () => this.handleResize());
         
+        this.initCanvasSize();
         this.init();
         this.startGameLoop();
     }
     
     initCanvasSize() {
+        this.canvas.width = window.innerWidth;
+        this.canvas.height = window.innerHeight;
+        
         const isMobile = window.innerWidth <= 768;
+        this.gridSize = isMobile ? 15 : 20;
         
-        if (isMobile) {
-            const maxWidth = Math.min(window.innerWidth - 40, 480);
-            this.canvas.width = maxWidth;
-            this.canvas.height = maxWidth;
-            this.gridSize = 20;
-        } else {
-            this.canvas.width = 480;
-            this.canvas.height = 480;
-            this.gridSize = 20;
-        }
-        
-        this.cols = this.canvas.width / this.gridSize;
-        this.rows = this.canvas.height / this.gridSize;
+        this.cols = Math.floor(this.canvas.width / this.gridSize);
+        this.rows = Math.floor(this.canvas.height / this.gridSize);
     }
     
     handleResize() {
