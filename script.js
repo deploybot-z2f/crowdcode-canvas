@@ -150,8 +150,8 @@ class SnakeGame {
         
         while (!validPosition) {
             food = {
-                x: Math.floor(Math.random() * this.cols),
-                y: Math.floor(Math.random() * this.rows)
+                x: Math.floor(Math.random() * (this.cols - 2)) + 1,
+                y: Math.floor(Math.random() * (this.rows - 2)) + 1
             };
             
             const onPlayerSnake = this.snake.some(segment => 
