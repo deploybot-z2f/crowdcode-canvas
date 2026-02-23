@@ -1,3 +1,55 @@
+class GameHub {
+    constructor() {
+        this.mainMenu = document.getElementById('main-menu');
+        this.snakeGame = document.getElementById('snake-game');
+        this.backBtn = document.getElementById('back-btn');
+        this.menuBtn = document.getElementById('menu-btn');
+        
+        this.setupMenuListeners();
+        this.currentGame = null;
+    }
+    
+    setupMenuListeners() {
+        const gameCards = document.querySelectorAll('.game-card');
+        gameCards.forEach(card => {
+            card.addEventListener('click', () => {
+                const gameName = card.dataset.game;
+                this.loadGame(gameName);
+            });
+        });
+        
+        if (this.backBtn) {
+            this.backBtn.addEventListener('click', () => this.returnToMenu());
+        }
+        
+        if (this.menuBtn) {
+            this.menuBtn.addEventListener('click', () => this.returnToMenu());
+        }
+    }
+    
+    loadGame(gameName) {
+        if (gameName === 'snake') {
+            this.mainMenu.classList.add('hidden');
+            this.snakeGame.classList.remove('hidden');
+            
+            if (!this.currentGame) {
+                this.currentGame = new SnakeGame();
+            } else {
+                this.currentGame.restart();
+            }
+        }
+    }
+    
+    returnToMenu() {
+        this.snakeGame.classList.add('hidden');
+        this.mainMenu.classList.remove('hidden');
+        
+        if (this.currentGame) {
+            this.currentGame.pause();
+        }
+    }
+}
+
 class SnakeGame {
     constructor() {
         this.canvas = document.getElementById('game-canvas');
@@ -13,11 +65,15 @@ class SnakeGame {
         this.highScoreElement.textContent = this.highScore;
         
         this.restartBtn.addEventListener('click', () => this.restart());
-        document.addEventListener('keydown', (e) => this.handleKeyPress(e));
+        this.keyPressHandler = (e) => this.handleKeyPress(e);
+        document.addEventListener('keydown', this.keyPressHandler);
         
         this.initTouchControls();
         
-        window.addEventListener('resize', () => this.handleResize());
+        this.resizeHandler = () => this.handleResize();
+        window.addEventListener('resize', this.resizeHandler);
+        
+        this.paused = false;
         
         this.initCanvasSize();
         this.init();
@@ -77,7 +133,7 @@ class SnakeGame {
             this.gameStarted = true;
         }
         
-        if (this.gameOver) return;
+        if (this.gameOver || this.paused) return;
         
         const deltaX = endX - startX;
         const deltaY = endY - startY;
@@ -173,7 +229,7 @@ class SnakeGame {
             this.gameStarted = true;
         }
         
-        if (this.gameOver) return;
+        if (this.gameOver || this.paused) return;
         
         switch(e.key) {
             case 'ArrowUp':
@@ -204,7 +260,7 @@ class SnakeGame {
     }
     
     updateAI() {
-        if (!this.aiAlive || !this.gameStarted) return;
+        if (!this.aiAlive || !this.gameStarted || this.paused) return;
         
         const head = this.aiSnake[0];
         
@@ -368,7 +424,7 @@ class SnakeGame {
     }
     
     update() {
-        if (this.gameOver || !this.gameStarted) return;
+        if (this.gameOver || !this.gameStarted || this.paused) return;
         
         this.direction = { ...this.nextDirection };
         
@@ -496,11 +552,21 @@ class SnakeGame {
         this.init();
         this.lastUpdateTime = 0;
         this.lastAiUpdateTime = 0;
+        this.paused = false;
+    }
+    
+    pause() {
+        this.paused = true;
+        if (this.animationFrame) {
+            cancelAnimationFrame(this.animationFrame);
+        }
     }
     
     startGameLoop() {
         const gameLoop = (currentTime = 0) => {
             this.animationFrame = requestAnimationFrame(gameLoop);
+            
+            if (this.paused) return;
             
             if (currentTime - this.lastUpdateTime > this.gameSpeed) {
                 this.update();
@@ -524,5 +590,5 @@ class SnakeGame {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    new SnakeGame();
+    new GameHub();
 });
