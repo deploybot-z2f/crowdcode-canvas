@@ -3,10 +3,13 @@ class GameHub {
         this.mainMenu = document.getElementById('main-menu');
         this.snakeGame = document.getElementById('snake-game');
         this.brickGame = document.getElementById('brickbreaker-game');
+        this.crosswordGame = document.getElementById('crossword-game');
         this.backBtn = document.getElementById('back-btn');
         this.menuBtn = document.getElementById('menu-btn');
         this.brickBackBtn = document.getElementById('brick-back-btn');
         this.brickMenuBtn = document.getElementById('brick-menu-btn');
+        this.crosswordBackBtn = document.getElementById('crossword-back-btn');
+        this.crosswordMenuBtn = document.getElementById('crossword-menu-btn');
         
         this.setupMenuListeners();
         this.currentGame = null;
@@ -36,6 +39,14 @@ class GameHub {
         if (this.brickMenuBtn) {
             this.brickMenuBtn.addEventListener('click', () => this.returnToMenu());
         }
+
+        if (this.crosswordBackBtn) {
+            this.crosswordBackBtn.addEventListener('click', () => this.returnToMenu());
+        }
+        
+        if (this.crosswordMenuBtn) {
+            this.crosswordMenuBtn.addEventListener('click', () => this.returnToMenu());
+        }
     }
     
     loadGame(gameName) {
@@ -59,12 +70,23 @@ class GameHub {
                 this.brickGameInstance.restart();
             }
             this.currentGame = this.brickGameInstance;
+        } else if (gameName === 'crossword') {
+            this.mainMenu.classList.add('hidden');
+            this.crosswordGame.classList.remove('hidden');
+            
+            if (!this.crosswordGameInstance) {
+                this.crosswordGameInstance = new MiniCrosswordsGame();
+            } else {
+                this.crosswordGameInstance.restart();
+            }
+            this.currentGame = this.crosswordGameInstance;
         }
     }
     
     returnToMenu() {
         this.snakeGame.classList.add('hidden');
         this.brickGame.classList.add('hidden');
+        this.crosswordGame.classList.add('hidden');
         this.mainMenu.classList.remove('hidden');
         
         if (this.currentGame) {
@@ -950,6 +972,477 @@ class BrickBreakerGame {
         };
         
         gameLoop();
+    }
+}
+
+class MiniCrosswordsGame {
+    constructor() {
+        this.gridElement = document.getElementById('crossword-grid');
+        this.acrossCluesElement = document.getElementById('across-clues');
+        this.downCluesElement = document.getElementById('down-clues');
+        this.puzzleNumberElement = document.getElementById('puzzle-number');
+        this.timerElement = document.getElementById('game-timer');
+        this.completeScreen = document.getElementById('crossword-complete');
+        this.completionTimeElement = document.getElementById('completion-time');
+        
+        this.checkBtn = document.getElementById('check-btn');
+        this.revealBtn = document.getElementById('reveal-btn');
+        this.clearBtn = document.getElementById('clear-btn');
+        this.nextPuzzleBtn = document.getElementById('next-puzzle-btn');
+        this.crosswordNextBtn = document.getElementById('crossword-next-btn');
+        
+        this.puzzles = this.createPuzzles();
+        this.currentPuzzleIndex = 0;
+        this.startTime = null;
+        this.timerInterval = null;
+        this.paused = false;
+        
+        this.setupEventListeners();
+        this.loadPuzzle(this.currentPuzzleIndex);
+    }
+    
+    createPuzzles() {
+        return [
+            {
+                size: 5,
+                grid: [
+                    ['C', 'A', 'T', 'S', '#'],
+                    ['A', '#', 'R', '#', 'S'],
+                    ['R', 'U', 'N', 'S', 'T'],
+                    ['#', 'N', '#', 'U', 'A'],
+                    ['#', '#', '#', 'N', 'R']
+                ],
+                clues: {
+                    across: [
+                        { number: 1, clue: 'Feline pets', answer: 'CATS', row: 0, col: 0 },
+                        { number: 5, clue: 'Jogs quickly', answer: 'RUNS', row: 2, col: 0 }
+                    ],
+                    down: [
+                        { number: 1, clue: 'Automobile', answer: 'CAR', row: 0, col: 0 },
+                        { number: 2, clue: 'Not dressed', answer: 'UNST', row: 0, col: 3 },
+                        { number: 3, clue: 'Celestial body', answer: 'STAR', row: 0, col: 4 },
+                        { number: 4, clue: 'Light beam', answer: 'SUN', row: 1, col: 4 }
+                    ]
+                }
+            },
+            {
+                size: 5,
+                grid: [
+                    ['D', 'O', 'G', 'S', '#'],
+                    ['O', '#', 'O', '#', 'H'],
+                    ['T', 'E', 'A', 'M', 'E'],
+                    ['#', 'A', '#', 'A', 'A'],
+                    ['#', 'T', '#', 'P', 'T']
+                ],
+                clues: {
+                    across: [
+                        { number: 1, clue: 'Canine pets', answer: 'DOGS', row: 0, col: 0 },
+                        { number: 5, clue: 'Group working together', answer: 'TEAM', row: 2, col: 0 },
+                        { number: 6, clue: 'High temperature', answer: 'HEAT', row: 2, col: 4 }
+                    ],
+                    down: [
+                        { number: 1, clue: 'Small point', answer: 'DOT', row: 0, col: 0 },
+                        { number: 2, clue: 'Food from leaves', answer: 'GO', row: 0, col: 2 },
+                        { number: 3, clue: 'Consume food', answer: 'EAT', row: 1, col: 3 },
+                        { number: 4, clue: 'Chart or diagram', answer: 'MAP', row: 2, col: 3 }
+                    ]
+                }
+            },
+            {
+                size: 7,
+                grid: [
+                    ['B', 'O', 'O', 'K', '#', '#', '#'],
+                    ['A', '#', 'P', '#', 'C', 'A', 'R'],
+                    ['T', 'R', 'E', 'E', '#', 'P', '#'],
+                    ['#', 'E', '#', 'A', 'R', 'E', 'A'],
+                    ['S', 'U', 'N', '#', '#', '#', '#'],
+                    ['U', '#', 'O', 'W', 'L', '#', '#'],
+                    ['N', '#', '#', '#', '#', '#', '#']
+                ],
+                clues: {
+                    across: [
+                        { number: 1, clue: 'Reading material', answer: 'BOOK', row: 0, col: 0 },
+                        { number: 5, clue: 'Vehicle with wheels', answer: 'CAR', row: 1, col: 4 },
+                        { number: 6, clue: 'Woody plant', answer: 'TREE', row: 2, col: 0 },
+                        { number: 8, clue: 'Space or region', answer: 'AREA', row: 3, col: 3 },
+                        { number: 9, clue: 'Our star', answer: 'SUN', row: 4, col: 0 },
+                        { number: 11, clue: 'Night bird', answer: 'OWL', row: 5, col: 2 }
+                    ],
+                    down: [
+                        { number: 1, clue: 'Flying mammal', answer: 'BAT', row: 0, col: 0 },
+                        { number: 2, clue: 'Not cooked', answer: 'OREN', row: 0, col: 1 },
+                        { number: 3, clue: 'At this moment', answer: 'NOW', row: 2, col: 2 },
+                        { number: 4, clue: 'Bird limb', answer: 'LEG', row: 1, col: 5 },
+                        { number: 7, clue: 'Capture', answer: 'APE', row: 1, col: 5 },
+                        { number: 10, clue: 'Light brown', answer: 'SUN', row: 4, col: 0 }
+                    ]
+                }
+            }
+        ];
+    }
+    
+    setupEventListeners() {
+        this.checkBtn.addEventListener('click', () => this.checkAnswers());
+        this.revealBtn.addEventListener('click', () => this.revealAnswers());
+        this.clearBtn.addEventListener('click', () => this.clearGrid());
+        this.nextPuzzleBtn.addEventListener('click', () => this.loadNextPuzzle());
+        this.crosswordNextBtn.addEventListener('click', () => this.loadNextPuzzle());
+        
+        this.keyPressHandler = (e) => this.handleKeyPress(e);
+        document.addEventListener('keydown', this.keyPressHandler);
+    }
+    
+    loadPuzzle(index) {
+        this.currentPuzzleIndex = index;
+        this.puzzle = this.puzzles[index];
+        this.currentCell = null;
+        this.currentDirection = 'across';
+        
+        this.puzzleNumberElement.textContent = index + 1;
+        this.completeScreen.classList.add('hidden');
+        
+        this.renderGrid();
+        this.renderClues();
+        this.startTimer();
+    }
+    
+    renderGrid() {
+        this.gridElement.innerHTML = '';
+        this.gridElement.style.gridTemplateColumns = `repeat(${this.puzzle.size}, 1fr)`;
+        
+        const clueNumbers = new Map();
+        let clueNum = 1;
+        
+        [...this.puzzle.clues.across, ...this.puzzle.clues.down].forEach(clue => {
+            const key = `${clue.row}-${clue.col}`;
+            if (!clueNumbers.has(key)) {
+                clueNumbers.set(key, clueNum++);
+            }
+        });
+        
+        for (let row = 0; row < this.puzzle.size; row++) {
+            for (let col = 0; col < this.puzzle.size; col++) {
+                const cell = document.createElement('div');
+                cell.className = 'crossword-cell';
+                
+                if (this.puzzle.grid[row][col] === '#') {
+                    cell.classList.add('black');
+                } else {
+                    cell.dataset.row = row;
+                    cell.dataset.col = col;
+                    cell.dataset.answer = this.puzzle.grid[row][col];
+                    
+                    const key = `${row}-${col}`;
+                    if (clueNumbers.has(key)) {
+                        const number = document.createElement('span');
+                        number.className = 'cell-number';
+                        number.textContent = clueNumbers.get(key);
+                        cell.appendChild(number);
+                    }
+                    
+                    cell.addEventListener('click', () => this.selectCell(cell));
+                }
+                
+                this.gridElement.appendChild(cell);
+            }
+        }
+    }
+    
+    renderClues() {
+        this.acrossCluesElement.innerHTML = '';
+        this.downCluesElement.innerHTML = '';
+        
+        const clueNumbers = new Map();
+        let clueNum = 1;
+        
+        const allClues = [...this.puzzle.clues.across, ...this.puzzle.clues.down];
+        const sortedClues = allClues.sort((a, b) => {
+            if (a.row !== b.row) return a.row - b.row;
+            return a.col - b.col;
+        });
+        
+        sortedClues.forEach(clue => {
+            const key = `${clue.row}-${clue.col}`;
+            if (!clueNumbers.has(key)) {
+                clueNumbers.set(key, clueNum++);
+            }
+        });
+        
+        this.puzzle.clues.across.forEach(clue => {
+            const key = `${clue.row}-${clue.col}`;
+            const clueElement = document.createElement('div');
+            clueElement.className = 'clue-item';
+            clueElement.dataset.row = clue.row;
+            clueElement.dataset.col = clue.col;
+            clueElement.dataset.direction = 'across';
+            clueElement.innerHTML = `<span class="clue-number">${clueNumbers.get(key)}.</span><span class="clue-text">${clue.clue}</span>`;
+            clueElement.addEventListener('click', () => this.selectClue(clue.row, clue.col, 'across'));
+            this.acrossCluesElement.appendChild(clueElement);
+        });
+        
+        this.puzzle.clues.down.forEach(clue => {
+            const key = `${clue.row}-${clue.col}`;
+            const clueElement = document.createElement('div');
+            clueElement.className = 'clue-item';
+            clueElement.dataset.row = clue.row;
+            clueElement.dataset.col = clue.col;
+            clueElement.dataset.direction = 'down';
+            clueElement.innerHTML = `<span class="clue-number">${clueNumbers.get(key)}.</span><span class="clue-text">${clue.clue}</span>`;
+            clueElement.addEventListener('click', () => this.selectClue(clue.row, clue.col, 'down'));
+            this.downCluesElement.appendChild(clueElement);
+        });
+    }
+    
+    selectCell(cell) {
+        if (cell.classList.contains('black')) return;
+        
+        const row = parseInt(cell.dataset.row);
+        const col = parseInt(cell.dataset.col);
+        
+        if (this.currentCell === cell) {
+            this.currentDirection = this.currentDirection === 'across' ? 'down' : 'across';
+        }
+        
+        this.currentCell = cell;
+        this.highlightCells(row, col, this.currentDirection);
+    }
+    
+    selectClue(row, col, direction) {
+        const cells = this.gridElement.querySelectorAll('.crossword-cell');
+        const targetCell = Array.from(cells).find(c => 
+            c.dataset.row == row && c.dataset.col == col
+        );
+        
+        if (targetCell) {
+            this.currentCell = targetCell;
+            this.currentDirection = direction;
+            this.highlightCells(row, col, direction);
+        }
+    }
+    
+    highlightCells(row, col, direction) {
+        const cells = this.gridElement.querySelectorAll('.crossword-cell');
+        cells.forEach(c => {
+            c.classList.remove('active', 'highlighted');
+        });
+        
+        const clues = this.acrossCluesElement.querySelectorAll('.clue-item');
+        const downClues = this.downCluesElement.querySelectorAll('.clue-item');
+        [...clues, ...downClues].forEach(c => c.classList.remove('active'));
+        
+        if (direction === 'across') {
+            for (let c = col; c < this.puzzle.size; c++) {
+                const cell = Array.from(cells).find(ce => 
+                    ce.dataset.row == row && ce.dataset.col == c
+                );
+                if (cell && !cell.classList.contains('black')) {
+                    cell.classList.add('highlighted');
+                } else break;
+            }
+            
+            const activeClue = Array.from(clues).find(c => 
+                c.dataset.row == row && c.dataset.col <= col && c.dataset.direction === 'across'
+            );
+            if (activeClue) activeClue.classList.add('active');
+        } else {
+            for (let r = row; r < this.puzzle.size; r++) {
+                const cell = Array.from(cells).find(ce => 
+                    ce.dataset.row == r && ce.dataset.col == col
+                );
+                if (cell && !cell.classList.contains('black')) {
+                    cell.classList.add('highlighted');
+                } else break;
+            }
+            
+            const activeClue = Array.from(downClues).find(c => 
+                c.dataset.col == col && c.dataset.row <= row && c.dataset.direction === 'down'
+            );
+            if (activeClue) activeClue.classList.add('active');
+        }
+        
+        if (this.currentCell) {
+            this.currentCell.classList.add('active');
+        }
+    }
+    
+    handleKeyPress(e) {
+        if (this.paused || !this.currentCell) return;
+        
+        if (e.key.length === 1 && e.key.match(/[a-zA-Z]/)) {
+            this.currentCell.textContent = e.key.toUpperCase();
+            if (this.currentCell.querySelector('.cell-number')) {
+                this.currentCell.appendChild(this.currentCell.querySelector('.cell-number'));
+            }
+            this.moveToNextCell();
+            e.preventDefault();
+        } else if (e.key === 'Backspace') {
+            const numberSpan = this.currentCell.querySelector('.cell-number');
+            this.currentCell.textContent = '';
+            if (numberSpan) {
+                this.currentCell.appendChild(numberSpan);
+            }
+            this.moveToPreviousCell();
+            e.preventDefault();
+        } else if (e.key === 'ArrowRight') {
+            this.moveCell(0, 1);
+            e.preventDefault();
+        } else if (e.key === 'ArrowLeft') {
+            this.moveCell(0, -1);
+            e.preventDefault();
+        } else if (e.key === 'ArrowDown') {
+            this.moveCell(1, 0);
+            e.preventDefault();
+        } else if (e.key === 'ArrowUp') {
+            this.moveCell(-1, 0);
+            e.preventDefault();
+        } else if (e.key === ' ') {
+            this.currentDirection = this.currentDirection === 'across' ? 'down' : 'across';
+            const row = parseInt(this.currentCell.dataset.row);
+            const col = parseInt(this.currentCell.dataset.col);
+            this.highlightCells(row, col, this.currentDirection);
+            e.preventDefault();
+        }
+    }
+    
+    moveToNextCell() {
+        const row = parseInt(this.currentCell.dataset.row);
+        const col = parseInt(this.currentCell.dataset.col);
+        
+        if (this.currentDirection === 'across') {
+            this.moveCell(0, 1);
+        } else {
+            this.moveCell(1, 0);
+        }
+    }
+    
+    moveToPreviousCell() {
+        if (this.currentDirection === 'across') {
+            this.moveCell(0, -1);
+        } else {
+            this.moveCell(-1, 0);
+        }
+    }
+    
+    moveCell(rowDelta, colDelta) {
+        if (!this.currentCell) return;
+        
+        const row = parseInt(this.currentCell.dataset.row);
+        const col = parseInt(this.currentCell.dataset.col);
+        const newRow = row + rowDelta;
+        const newCol = col + colDelta;
+        
+        if (newRow >= 0 && newRow < this.puzzle.size && newCol >= 0 && newCol < this.puzzle.size) {
+            const cells = this.gridElement.querySelectorAll('.crossword-cell');
+            const newCell = Array.from(cells).find(c => 
+                c.dataset.row == newRow && c.dataset.col == newCol
+            );
+            
+            if (newCell && !newCell.classList.contains('black')) {
+                this.currentCell = newCell;
+                this.highlightCells(newRow, newCol, this.currentDirection);
+            }
+        }
+    }
+    
+    checkAnswers() {
+        const cells = this.gridElement.querySelectorAll('.crossword-cell:not(.black)');
+        let allCorrect = true;
+        
+        cells.forEach(cell => {
+            const userAnswer = cell.textContent.replace(/\d+/, '').trim();
+            const correctAnswer = cell.dataset.answer;
+            
+            cell.classList.remove('correct', 'incorrect');
+            
+            if (userAnswer) {
+                if (userAnswer === correctAnswer) {
+                    cell.classList.add('correct');
+                } else {
+                    cell.classList.add('incorrect');
+                    allCorrect = false;
+                }
+            } else {
+                allCorrect = false;
+            }
+        });
+        
+        if (allCorrect) {
+            this.completePuzzle();
+        }
+    }
+    
+    revealAnswers() {
+        const cells = this.gridElement.querySelectorAll('.crossword-cell:not(.black)');
+        
+        cells.forEach(cell => {
+            const correctAnswer = cell.dataset.answer;
+            const numberSpan = cell.querySelector('.cell-number');
+            cell.textContent = correctAnswer;
+            if (numberSpan) {
+                cell.appendChild(numberSpan);
+            }
+            cell.classList.add('correct');
+            cell.classList.remove('incorrect');
+        });
+    }
+    
+    clearGrid() {
+        const cells = this.gridElement.querySelectorAll('.crossword-cell:not(.black)');
+        
+        cells.forEach(cell => {
+            const numberSpan = cell.querySelector('.cell-number');
+            cell.textContent = '';
+            if (numberSpan) {
+                cell.appendChild(numberSpan);
+            }
+            cell.classList.remove('correct', 'incorrect');
+        });
+    }
+    
+    completePuzzle() {
+        this.stopTimer();
+        const elapsed = Math.floor((Date.now() - this.startTime) / 1000);
+        const minutes = Math.floor(elapsed / 60);
+        const seconds = elapsed % 60;
+        this.completionTimeElement.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        this.completeScreen.classList.remove('hidden');
+    }
+    
+    loadNextPuzzle() {
+        this.completeScreen.classList.add('hidden');
+        this.currentPuzzleIndex = (this.currentPuzzleIndex + 1) % this.puzzles.length;
+        this.loadPuzzle(this.currentPuzzleIndex);
+    }
+    
+    startTimer() {
+        this.startTime = Date.now();
+        this.stopTimer();
+        
+        this.timerInterval = setInterval(() => {
+            if (!this.paused) {
+                const elapsed = Math.floor((Date.now() - this.startTime) / 1000);
+                const minutes = Math.floor(elapsed / 60);
+                const seconds = elapsed % 60;
+                this.timerElement.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            }
+        }, 1000);
+    }
+    
+    stopTimer() {
+        if (this.timerInterval) {
+            clearInterval(this.timerInterval);
+            this.timerInterval = null;
+        }
+    }
+    
+    restart() {
+        this.loadPuzzle(0);
+        this.paused = false;
+    }
+    
+    pause() {
+        this.paused = true;
+        this.stopTimer();
     }
 }
 
