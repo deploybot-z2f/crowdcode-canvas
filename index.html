@@ -5,18 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Cool Snake</title>
+    <title>Game Hub</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <!-- Main Menu -->
     <div id="main-menu" class="main-menu">
         <div class="menu-container">
+            <h1 class="hub-title">Game Hub</h1>
             <div class="games-grid">
                 <div class="game-card" data-game="snake">
                     <div class="game-icon">🐍🤖</div>
                     <h2 class="game-name">Cool Snake</h2>
                     <p class="game-description">Classic snake game with AI opponent</p>
+                    <button class="play-btn">Play Now</button>
+                </div>
+                <div class="game-card" data-game="brickbreaker">
+                    <div class="game-icon">🧱⚡</div>
+                    <h2 class="game-name">Brick Breaker</h2>
+                    <p class="game-description">Classic paddle game - break all the bricks!</p>
                     <button class="play-btn">Play Now</button>
                 </div>
             </div>
@@ -48,6 +55,35 @@
             <p>Score: <span id="final-score">0</span></p>
             <button id="restart-btn">Play Again</button>
             <button id="menu-btn" class="menu-button">Back to Menu</button>
+        </div>
+    </div>
+
+    <!-- Brick Breaker Game -->
+    <div id="brickbreaker-game" class="game-container hidden">
+        <canvas id="brick-canvas"></canvas>
+        
+        <div class="ui-overlay">
+            <div class="header">
+                <button id="brick-back-btn" class="back-button">← Menu</button>
+                <div class="header-content">
+                    <h1>brick breaker</h1>
+                    <p class="desktop-only">Move mouse or arrow keys</p>
+                    <p class="mobile-only">Touch to move paddle</p>
+                </div>
+            </div>
+            
+            <div class="score-board">
+                <div class="score">Score: <span id="brick-score">0</span></div>
+                <div class="lives">Lives: <span id="brick-lives">3</span></div>
+                <div class="high-score">High: <span id="brick-high-score">0</span></div>
+            </div>
+        </div>
+        
+        <div id="brick-game-over" class="game-over hidden">
+            <h2 id="brick-result-title">Game Over!</h2>
+            <p>Score: <span id="brick-final-score">0</span></p>
+            <button id="brick-restart-btn">Play Again</button>
+            <button id="brick-menu-btn" class="menu-button">Back to Menu</button>
         </div>
     </div>
     
