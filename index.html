@@ -26,6 +26,12 @@
                     <p class="game-description">Classic paddle game - break all the bricks!</p>
                     <button class="play-btn">Play Now</button>
                 </div>
+                <div class="game-card" data-game="pong">
+                    <div class="game-icon">🏓🎮</div>
+                    <h2 class="game-name">Pong</h2>
+                    <p class="game-description">Classic table tennis - beat the AI!</p>
+                    <button class="play-btn">Play Now</button>
+                </div>
                 <div class="game-card" data-game="crossword">
                     <div class="game-icon">📝🔤</div>
                     <h2 class="game-name">Mini Crosswords</h2>
@@ -90,6 +96,34 @@
             <p>Score: <span id="brick-final-score">0</span></p>
             <button id="brick-restart-btn">Play Again</button>
             <button id="brick-menu-btn" class="menu-button">Back to Menu</button>
+        </div>
+    </div>
+
+    <!-- Pong Game -->
+    <div id="pong-game" class="game-container hidden">
+        <canvas id="pong-canvas"></canvas>
+        
+        <div class="ui-overlay">
+            <div class="header">
+                <button id="pong-back-btn" class="back-button">← Menu</button>
+                <div class="header-content">
+                    <h1>pong</h1>
+                    <p class="desktop-only">W/S or Arrow Keys to move</p>
+                    <p class="mobile-only">Touch left side to move</p>
+                </div>
+            </div>
+            
+            <div class="score-board">
+                <div class="score">You: <span id="pong-player-score">0</span></div>
+                <div class="lives">AI: <span id="pong-ai-score">0</span></div>
+            </div>
+        </div>
+        
+        <div id="pong-game-over" class="game-over hidden">
+            <h2 id="pong-result-title">Game Over!</h2>
+            <p>Final Score: <span id="pong-final-score">0 - 0</span></p>
+            <button id="pong-restart-btn">Play Again</button>
+            <button id="pong-menu-btn" class="menu-button">Back to Menu</button>
         </div>
     </div>
 

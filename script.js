@@ -3,11 +3,14 @@ class GameHub {
         this.mainMenu = document.getElementById('main-menu');
         this.snakeGame = document.getElementById('snake-game');
         this.brickGame = document.getElementById('brickbreaker-game');
+        this.pongGame = document.getElementById('pong-game');
         this.crosswordGame = document.getElementById('crossword-game');
         this.backBtn = document.getElementById('back-btn');
         this.menuBtn = document.getElementById('menu-btn');
         this.brickBackBtn = document.getElementById('brick-back-btn');
         this.brickMenuBtn = document.getElementById('brick-menu-btn');
+        this.pongBackBtn = document.getElementById('pong-back-btn');
+        this.pongMenuBtn = document.getElementById('pong-menu-btn');
         this.crosswordBackBtn = document.getElementById('crossword-back-btn');
         this.crosswordMenuBtn = document.getElementById('crossword-menu-btn');
         
@@ -40,6 +43,14 @@ class GameHub {
             this.brickMenuBtn.addEventListener('click', () => this.returnToMenu());
         }
 
+        if (this.pongBackBtn) {
+            this.pongBackBtn.addEventListener('click', () => this.returnToMenu());
+        }
+        
+        if (this.pongMenuBtn) {
+            this.pongMenuBtn.addEventListener('click', () => this.returnToMenu());
+        }
+
         if (this.crosswordBackBtn) {
             this.crosswordBackBtn.addEventListener('click', () => this.returnToMenu());
         }
@@ -70,6 +81,16 @@ class GameHub {
                 this.brickGameInstance.restart();
             }
             this.currentGame = this.brickGameInstance;
+        } else if (gameName === 'pong') {
+            this.mainMenu.classList.add('hidden');
+            this.pongGame.classList.remove('hidden');
+            
+            if (!this.pongGameInstance) {
+                this.pongGameInstance = new PongGame();
+            } else {
+                this.pongGameInstance.restart();
+            }
+            this.currentGame = this.pongGameInstance;
         } else if (gameName === 'crossword') {
             this.mainMenu.classList.add('hidden');
             this.crosswordGame.classList.remove('hidden');
@@ -86,6 +107,7 @@ class GameHub {
     returnToMenu() {
         this.snakeGame.classList.add('hidden');
         this.brickGame.classList.add('hidden');
+        this.pongGame.classList.add('hidden');
         this.crosswordGame.classList.add('hidden');
         this.mainMenu.classList.remove('hidden');
         
@@ -941,6 +963,339 @@ class BrickBreakerGame {
             this.gameOverScreen.style.boxShadow = '0 0 30px rgba(74, 222, 128, 0.5)';
         } else {
             this.resultTitle.textContent = 'Game Over!';
+            this.resultTitle.classList.remove('win');
+            this.gameOverScreen.style.borderColor = '#ef4444';
+            this.gameOverScreen.style.boxShadow = '0 0 30px rgba(239, 68, 68, 0.5)';
+        }
+        
+        this.gameOverScreen.classList.remove('hidden');
+    }
+    
+    restart() {
+        this.init();
+        this.paused = false;
+    }
+    
+    pause() {
+        this.paused = true;
+        if (this.animationFrame) {
+            cancelAnimationFrame(this.animationFrame);
+        }
+    }
+    
+    startGameLoop() {
+        const gameLoop = () => {
+            this.animationFrame = requestAnimationFrame(gameLoop);
+            
+            if (this.paused) return;
+            
+            this.update();
+            this.draw();
+        };
+        
+        gameLoop();
+    }
+}
+
+class PongGame {
+    constructor() {
+        this.canvas = document.getElementById('pong-canvas');
+        this.ctx = this.canvas.getContext('2d');
+        
+        this.playerScoreElement = document.getElementById('pong-player-score');
+        this.aiScoreElement = document.getElementById('pong-ai-score');
+        this.finalScoreElement = document.getElementById('pong-final-score');
+        this.gameOverScreen = document.getElementById('pong-game-over');
+        this.resultTitle = document.getElementById('pong-result-title');
+        this.restartBtn = document.getElementById('pong-restart-btn');
+        
+        this.restartBtn.addEventListener('click', () => this.restart());
+        
+        this.keyPressHandler = (e) => this.handleKeyPress(e);
+        document.addEventListener('keydown', this.keyPressHandler);
+        document.addEventListener('keyup', (e) => this.handleKeyUp(e));
+        
+        this.initTouchControls();
+        
+        this.resizeHandler = () => this.handleResize();
+        window.addEventListener('resize', this.resizeHandler);
+        
+        this.paused = false;
+        this.keys = {};
+        
+        this.initCanvasSize();
+        this.init();
+        this.startGameLoop();
+    }
+    
+    initCanvasSize() {
+        this.canvas.width = window.innerWidth;
+        this.canvas.height = window.innerHeight;
+    }
+    
+    handleResize() {
+        this.initCanvasSize();
+        this.restart();
+    }
+    
+    initTouchControls() {
+        let touchY = null;
+        
+        this.canvas.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            const touch = e.touches[0];
+            const rect = this.canvas.getBoundingClientRect();
+            const touchX = touch.clientX - rect.left;
+            
+            if (touchX < this.canvas.width / 2) {
+                touchY = touch.clientY - rect.top;
+            }
+            
+            if (!this.gameStarted) {
+                this.gameStarted = true;
+            }
+        }, { passive: false });
+        
+        this.canvas.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            const touch = e.touches[0];
+            const rect = this.canvas.getBoundingClientRect();
+            const touchX = touch.clientX - rect.left;
+            
+            if (touchX < this.canvas.width / 2) {
+                touchY = touch.clientY - rect.top;
+                this.playerPaddle.y = touchY - this.playerPaddle.height / 2;
+                this.playerPaddle.y = Math.max(0, Math.min(this.canvas.height - this.playerPaddle.height, this.playerPaddle.y));
+            }
+        }, { passive: false });
+        
+        this.canvas.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            touchY = null;
+        }, { passive: false });
+    }
+    
+    handleKeyPress(e) {
+        if (['w', 's', 'ArrowUp', 'ArrowDown'].includes(e.key)) {
+            this.keys[e.key] = true;
+            if (!this.gameStarted) {
+                this.gameStarted = true;
+            }
+            e.preventDefault();
+        }
+    }
+    
+    handleKeyUp(e) {
+        if (['w', 's', 'ArrowUp', 'ArrowDown'].includes(e.key)) {
+            this.keys[e.key] = false;
+        }
+    }
+    
+    init() {
+        const isMobile = window.innerWidth <= 768;
+        
+        this.paddleWidth = isMobile ? 12 : 15;
+        this.paddleHeight = isMobile ? 80 : 100;
+        this.paddleSpeed = isMobile ? 6 : 8;
+        
+        this.playerPaddle = {
+            x: 30,
+            y: this.canvas.height / 2 - this.paddleHeight / 2,
+            width: this.paddleWidth,
+            height: this.paddleHeight,
+            speed: this.paddleSpeed,
+            score: 0
+        };
+        
+        this.aiPaddle = {
+            x: this.canvas.width - 30 - this.paddleWidth,
+            y: this.canvas.height / 2 - this.paddleHeight / 2,
+            width: this.paddleWidth,
+            height: this.paddleHeight,
+            speed: isMobile ? 5 : 6,
+            score: 0
+        };
+        
+        this.ball = {
+            x: this.canvas.width / 2,
+            y: this.canvas.height / 2,
+            radius: isMobile ? 8 : 10,
+            dx: 0,
+            dy: 0,
+            speed: isMobile ? 5 : 6,
+            maxSpeed: isMobile ? 10 : 12
+        };
+        
+        this.playerScore = 0;
+        this.aiScore = 0;
+        this.gameOver = false;
+        this.gameStarted = false;
+        this.maxScore = 7;
+        
+        this.updateScores();
+        this.gameOverScreen.classList.add('hidden');
+        
+        this.draw();
+    }
+    
+    resetBall() {
+        this.ball.x = this.canvas.width / 2;
+        this.ball.y = this.canvas.height / 2;
+        this.ball.dx = 0;
+        this.ball.dy = 0;
+        this.gameStarted = false;
+    }
+    
+    launchBall() {
+        const angle = (Math.random() * Math.PI / 3) - Math.PI / 6;
+        const direction = Math.random() > 0.5 ? 1 : -1;
+        this.ball.dx = this.ball.speed * Math.cos(angle) * direction;
+        this.ball.dy = this.ball.speed * Math.sin(angle);
+    }
+    
+    update() {
+        if (this.gameOver || this.paused) return;
+        
+        if (!this.gameStarted) {
+            if (this.keys['w'] || this.keys['s'] || this.keys['ArrowUp'] || this.keys['ArrowDown']) {
+                this.gameStarted = true;
+                this.launchBall();
+            }
+        }
+        
+        if (this.keys['w'] || this.keys['ArrowUp']) {
+            this.playerPaddle.y -= this.playerPaddle.speed;
+        }
+        if (this.keys['s'] || this.keys['ArrowDown']) {
+            this.playerPaddle.y += this.playerPaddle.speed;
+        }
+        
+        this.playerPaddle.y = Math.max(0, Math.min(this.canvas.height - this.playerPaddle.height, this.playerPaddle.y));
+        
+        if (this.gameStarted) {
+            const aiTarget = this.ball.y - this.aiPaddle.height / 2;
+            const aiDiff = aiTarget - this.aiPaddle.y;
+            
+            if (Math.abs(aiDiff) > this.aiPaddle.speed) {
+                this.aiPaddle.y += Math.sign(aiDiff) * this.aiPaddle.speed;
+            }
+            
+            this.aiPaddle.y = Math.max(0, Math.min(this.canvas.height - this.aiPaddle.height, this.aiPaddle.y));
+            
+            this.ball.x += this.ball.dx;
+            this.ball.y += this.ball.dy;
+            
+            if (this.ball.y - this.ball.radius < 0 || this.ball.y + this.ball.radius > this.canvas.height) {
+                this.ball.dy = -this.ball.dy;
+            }
+            
+            if (this.ball.x - this.ball.radius < this.playerPaddle.x + this.playerPaddle.width &&
+                this.ball.x + this.ball.radius > this.playerPaddle.x &&
+                this.ball.y > this.playerPaddle.y &&
+                this.ball.y < this.playerPaddle.y + this.playerPaddle.height) {
+                
+                const hitPos = (this.ball.y - this.playerPaddle.y) / this.playerPaddle.height;
+                const angle = (hitPos - 0.5) * Math.PI / 3;
+                const speed = Math.min(Math.sqrt(this.ball.dx * this.ball.dx + this.ball.dy * this.ball.dy) * 1.05, this.ball.maxSpeed);
+                this.ball.dx = Math.abs(speed * Math.cos(angle));
+                this.ball.dy = speed * Math.sin(angle);
+                this.ball.x = this.playerPaddle.x + this.playerPaddle.width + this.ball.radius;
+            }
+            
+            if (this.ball.x + this.ball.radius > this.aiPaddle.x &&
+                this.ball.x - this.ball.radius < this.aiPaddle.x + this.aiPaddle.width &&
+                this.ball.y > this.aiPaddle.y &&
+                this.ball.y < this.aiPaddle.y + this.aiPaddle.height) {
+                
+                const hitPos = (this.ball.y - this.aiPaddle.y) / this.aiPaddle.height;
+                const angle = (hitPos - 0.5) * Math.PI / 3;
+                const speed = Math.min(Math.sqrt(this.ball.dx * this.ball.dx + this.ball.dy * this.ball.dy) * 1.05, this.ball.maxSpeed);
+                this.ball.dx = -Math.abs(speed * Math.cos(angle));
+                this.ball.dy = speed * Math.sin(angle);
+                this.ball.x = this.aiPaddle.x - this.ball.radius;
+            }
+            
+            if (this.ball.x - this.ball.radius < 0) {
+                this.aiScore++;
+                this.updateScores();
+                if (this.aiScore >= this.maxScore) {
+                    this.endGame(false);
+                } else {
+                    this.resetBall();
+                }
+            }
+            
+            if (this.ball.x + this.ball.radius > this.canvas.width) {
+                this.playerScore++;
+                this.updateScores();
+                if (this.playerScore >= this.maxScore) {
+                    this.endGame(true);
+                } else {
+                    this.resetBall();
+                }
+            }
+        }
+    }
+    
+    draw() {
+        this.ctx.fillStyle = '#000000';
+        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+        
+        this.ctx.strokeStyle = 'rgba(74, 222, 128, 0.3)';
+        this.ctx.lineWidth = 2;
+        this.ctx.setLineDash([10, 10]);
+        this.ctx.beginPath();
+        this.ctx.moveTo(this.canvas.width / 2, 0);
+        this.ctx.lineTo(this.canvas.width / 2, this.canvas.height);
+        this.ctx.stroke();
+        this.ctx.setLineDash([]);
+        
+        this.ctx.shadowColor = '#4ade80';
+        this.ctx.shadowBlur = 15;
+        this.ctx.fillStyle = '#4ade80';
+        this.ctx.fillRect(this.playerPaddle.x, this.playerPaddle.y, this.playerPaddle.width, this.playerPaddle.height);
+        
+        this.ctx.shadowColor = '#ef4444';
+        this.ctx.shadowBlur = 15;
+        this.ctx.fillStyle = '#ef4444';
+        this.ctx.fillRect(this.aiPaddle.x, this.aiPaddle.y, this.aiPaddle.width, this.aiPaddle.height);
+        
+        this.ctx.shadowColor = '#60a5fa';
+        this.ctx.shadowBlur = 20;
+        this.ctx.fillStyle = '#60a5fa';
+        this.ctx.beginPath();
+        this.ctx.arc(this.ball.x, this.ball.y, this.ball.radius, 0, Math.PI * 2);
+        this.ctx.fill();
+        
+        this.ctx.shadowBlur = 0;
+        
+        if (!this.gameStarted) {
+            const isMobile = window.innerWidth <= 768;
+            const message = isMobile ? 'Touch to start' : 'Press W/S or Arrow keys to start';
+            
+            this.ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+            this.ctx.font = isMobile ? '18px Arial' : '22px Arial';
+            this.ctx.textAlign = 'center';
+            this.ctx.fillText(message, this.canvas.width / 2, this.canvas.height / 2 + 50);
+        }
+    }
+    
+    updateScores() {
+        this.playerScoreElement.textContent = this.playerScore;
+        this.aiScoreElement.textContent = this.aiScore;
+    }
+    
+    endGame(won) {
+        this.gameOver = true;
+        this.finalScoreElement.textContent = `${this.playerScore} - ${this.aiScore}`;
+        
+        if (won) {
+            this.resultTitle.textContent = 'You Win! 🎉';
+            this.resultTitle.classList.add('win');
+            this.gameOverScreen.style.borderColor = '#4ade80';
+            this.gameOverScreen.style.boxShadow = '0 0 30px rgba(74, 222, 128, 0.5)';
+        } else {
+            this.resultTitle.textContent = 'AI Wins!';
             this.resultTitle.classList.remove('win');
             this.gameOverScreen.style.borderColor = '#ef4444';
             this.gameOverScreen.style.boxShadow = '0 0 30px rgba(239, 68, 68, 0.5)';

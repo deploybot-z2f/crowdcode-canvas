@@ -124,7 +124,7 @@ body {
     height: 100%;
 }
 
-#game-canvas, #brick-canvas {
+#game-canvas, #brick-canvas, #pong-canvas {
     position: fixed;
     top: 0;
     left: 0;
@@ -253,7 +253,7 @@ body {
     color: #cccccc;
 }
 
-#restart-btn, #brick-restart-btn, #crossword-next-btn {
+#restart-btn, #brick-restart-btn, #pong-restart-btn, #crossword-next-btn {
     background: #4ade80;
     color: #000;
     border: none;
@@ -267,13 +267,13 @@ body {
     margin-bottom: 10px;
 }
 
-#restart-btn:hover, #brick-restart-btn:hover, #crossword-next-btn:hover {
+#restart-btn:hover, #brick-restart-btn:hover, #pong-restart-btn:hover, #crossword-next-btn:hover {
     background: #22c55e;
     transform: scale(1.05);
     box-shadow: 0 0 15px rgba(74, 222, 128, 0.5);
 }
 
-#restart-btn:active, #brick-restart-btn:active, #crossword-next-btn:active {
+#restart-btn:active, #brick-restart-btn:active, #pong-restart-btn:active, #crossword-next-btn:active {
     transform: scale(0.95);
 }
 
@@ -603,7 +603,7 @@ body {
         margin-bottom: 20px;
     }
 
-    #restart-btn, #brick-restart-btn, #crossword-next-btn {
+    #restart-btn, #brick-restart-btn, #pong-restart-btn, #crossword-next-btn {
         padding: 10px 25px;
         font-size: 1rem;
         -webkit-tap-highlight-color: transparent;
