@@ -1050,10 +1050,6 @@ class PongGame {
             if (touchX < this.canvas.width / 2) {
                 touchY = touch.clientY - rect.top;
             }
-            
-            if (!this.gameStarted) {
-                this.gameStarted = true;
-            }
         }, { passive: false });
         
         this.canvas.addEventListener('touchmove', (e) => {
@@ -1078,9 +1074,6 @@ class PongGame {
     handleKeyPress(e) {
         if (['w', 's', 'ArrowUp', 'ArrowDown'].includes(e.key)) {
             this.keys[e.key] = true;
-            if (!this.gameStarted) {
-                this.gameStarted = true;
-            }
             e.preventDefault();
         }
     }
@@ -1129,8 +1122,10 @@ class PongGame {
         this.playerScore = 0;
         this.aiScore = 0;
         this.gameOver = false;
-        this.gameStarted = false;
+        this.gameStarted = true;
         this.maxScore = 7;
+        
+        this.launchBall();
         
         this.updateScores();
         this.gameOverScreen.classList.add('hidden');
@@ -1141,9 +1136,10 @@ class PongGame {
     resetBall() {
         this.ball.x = this.canvas.width / 2;
         this.ball.y = this.canvas.height / 2;
-        this.ball.dx = 0;
-        this.ball.dy = 0;
-        this.gameStarted = false;
+        
+        setTimeout(() => {
+            this.launchBall();
+        }, 500);
     }
     
     launchBall() {
@@ -1156,13 +1152,6 @@ class PongGame {
     update() {
         if (this.gameOver || this.paused) return;
         
-        if (!this.gameStarted) {
-            if (this.keys['w'] || this.keys['s'] || this.keys['ArrowUp'] || this.keys['ArrowDown']) {
-                this.gameStarted = true;
-                this.launchBall();
-            }
-        }
-        
         if (this.keys['w'] || this.keys['ArrowUp']) {
             this.playerPaddle.y -= this.playerPaddle.speed;
         }
@@ -1172,67 +1161,65 @@ class PongGame {
         
         this.playerPaddle.y = Math.max(0, Math.min(this.canvas.height - this.playerPaddle.height, this.playerPaddle.y));
         
-        if (this.gameStarted) {
-            const aiTarget = this.ball.y - this.aiPaddle.height / 2;
-            const aiDiff = aiTarget - this.aiPaddle.y;
+        const aiTarget = this.ball.y - this.aiPaddle.height / 2;
+        const aiDiff = aiTarget - this.aiPaddle.y;
+        
+        if (Math.abs(aiDiff) > this.aiPaddle.speed) {
+            this.aiPaddle.y += Math.sign(aiDiff) * this.aiPaddle.speed;
+        }
+        
+        this.aiPaddle.y = Math.max(0, Math.min(this.canvas.height - this.aiPaddle.height, this.aiPaddle.y));
+        
+        this.ball.x += this.ball.dx;
+        this.ball.y += this.ball.dy;
+        
+        if (this.ball.y - this.ball.radius < 0 || this.ball.y + this.ball.radius > this.canvas.height) {
+            this.ball.dy = -this.ball.dy;
+        }
+        
+        if (this.ball.x - this.ball.radius < this.playerPaddle.x + this.playerPaddle.width &&
+            this.ball.x + this.ball.radius > this.playerPaddle.x &&
+            this.ball.y > this.playerPaddle.y &&
+            this.ball.y < this.playerPaddle.y + this.playerPaddle.height) {
             
-            if (Math.abs(aiDiff) > this.aiPaddle.speed) {
-                this.aiPaddle.y += Math.sign(aiDiff) * this.aiPaddle.speed;
+            const hitPos = (this.ball.y - this.playerPaddle.y) / this.playerPaddle.height;
+            const angle = (hitPos - 0.5) * Math.PI / 3;
+            const speed = Math.min(Math.sqrt(this.ball.dx * this.ball.dx + this.ball.dy * this.ball.dy) * 1.05, this.ball.maxSpeed);
+            this.ball.dx = Math.abs(speed * Math.cos(angle));
+            this.ball.dy = speed * Math.sin(angle);
+            this.ball.x = this.playerPaddle.x + this.playerPaddle.width + this.ball.radius;
+        }
+        
+        if (this.ball.x + this.ball.radius > this.aiPaddle.x &&
+            this.ball.x - this.ball.radius < this.aiPaddle.x + this.aiPaddle.width &&
+            this.ball.y > this.aiPaddle.y &&
+            this.ball.y < this.aiPaddle.y + this.aiPaddle.height) {
+            
+            const hitPos = (this.ball.y - this.aiPaddle.y) / this.aiPaddle.height;
+            const angle = (hitPos - 0.5) * Math.PI / 3;
+            const speed = Math.min(Math.sqrt(this.ball.dx * this.ball.dx + this.ball.dy * this.ball.dy) * 1.05, this.ball.maxSpeed);
+            this.ball.dx = -Math.abs(speed * Math.cos(angle));
+            this.ball.dy = speed * Math.sin(angle);
+            this.ball.x = this.aiPaddle.x - this.ball.radius;
+        }
+        
+        if (this.ball.x - this.ball.radius < 0) {
+            this.aiScore++;
+            this.updateScores();
+            if (this.aiScore >= this.maxScore) {
+                this.endGame(false);
+            } else {
+                this.resetBall();
             }
-            
-            this.aiPaddle.y = Math.max(0, Math.min(this.canvas.height - this.aiPaddle.height, this.aiPaddle.y));
-            
-            this.ball.x += this.ball.dx;
-            this.ball.y += this.ball.dy;
-            
-            if (this.ball.y - this.ball.radius < 0 || this.ball.y + this.ball.radius > this.canvas.height) {
-                this.ball.dy = -this.ball.dy;
-            }
-            
-            if (this.ball.x - this.ball.radius < this.playerPaddle.x + this.playerPaddle.width &&
-                this.ball.x + this.ball.radius > this.playerPaddle.x &&
-                this.ball.y > this.playerPaddle.y &&
-                this.ball.y < this.playerPaddle.y + this.playerPaddle.height) {
-                
-                const hitPos = (this.ball.y - this.playerPaddle.y) / this.playerPaddle.height;
-                const angle = (hitPos - 0.5) * Math.PI / 3;
-                const speed = Math.min(Math.sqrt(this.ball.dx * this.ball.dx + this.ball.dy * this.ball.dy) * 1.05, this.ball.maxSpeed);
-                this.ball.dx = Math.abs(speed * Math.cos(angle));
-                this.ball.dy = speed * Math.sin(angle);
-                this.ball.x = this.playerPaddle.x + this.playerPaddle.width + this.ball.radius;
-            }
-            
-            if (this.ball.x + this.ball.radius > this.aiPaddle.x &&
-                this.ball.x - this.ball.radius < this.aiPaddle.x + this.aiPaddle.width &&
-                this.ball.y > this.aiPaddle.y &&
-                this.ball.y < this.aiPaddle.y + this.aiPaddle.height) {
-                
-                const hitPos = (this.ball.y - this.aiPaddle.y) / this.aiPaddle.height;
-                const angle = (hitPos - 0.5) * Math.PI / 3;
-                const speed = Math.min(Math.sqrt(this.ball.dx * this.ball.dx + this.ball.dy * this.ball.dy) * 1.05, this.ball.maxSpeed);
-                this.ball.dx = -Math.abs(speed * Math.cos(angle));
-                this.ball.dy = speed * Math.sin(angle);
-                this.ball.x = this.aiPaddle.x - this.ball.radius;
-            }
-            
-            if (this.ball.x - this.ball.radius < 0) {
-                this.aiScore++;
-                this.updateScores();
-                if (this.aiScore >= this.maxScore) {
-                    this.endGame(false);
-                } else {
-                    this.resetBall();
-                }
-            }
-            
-            if (this.ball.x + this.ball.radius > this.canvas.width) {
-                this.playerScore++;
-                this.updateScores();
-                if (this.playerScore >= this.maxScore) {
-                    this.endGame(true);
-                } else {
-                    this.resetBall();
-                }
+        }
+        
+        if (this.ball.x + this.ball.radius > this.canvas.width) {
+            this.playerScore++;
+            this.updateScores();
+            if (this.playerScore >= this.maxScore) {
+                this.endGame(true);
+            } else {
+                this.resetBall();
             }
         }
     }
@@ -1268,16 +1255,6 @@ class PongGame {
         this.ctx.fill();
         
         this.ctx.shadowBlur = 0;
-        
-        if (!this.gameStarted) {
-            const isMobile = window.innerWidth <= 768;
-            const message = isMobile ? 'Touch to start' : 'Press W/S or Arrow keys to start';
-            
-            this.ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
-            this.ctx.font = isMobile ? '18px Arial' : '22px Arial';
-            this.ctx.textAlign = 'center';
-            this.ctx.fillText(message, this.canvas.width / 2, this.canvas.height / 2 + 50);
-        }
     }
     
     updateScores() {
