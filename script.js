@@ -740,7 +740,7 @@ class BrickBreakerGame {
             radius: isMobile ? 6 : 8,
             dx: 0,
             dy: 0,
-            speed: isMobile ? 5 : 6
+            speed: isMobile ? 2.5 : 3
         };
         
         this.bricks = [];
