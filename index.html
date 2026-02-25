@@ -32,12 +32,6 @@
                     <p class="game-description">Classic table tennis - beat the AI!</p>
                     <button class="play-btn">Play Now</button>
                 </div>
-                <div class="game-card" data-game="crossword">
-                    <div class="game-icon">📝🔤</div>
-                    <h2 class="game-name">Mini Crosswords</h2>
-                    <p class="game-description">Solve quick crossword puzzles</p>
-                    <button class="play-btn">Play Now</button>
-                </div>
             </div>
         </div>
     </div>
@@ -124,52 +118,6 @@
             <p>Final Score: <span id="pong-final-score">0 - 0</span></p>
             <button id="pong-restart-btn">Play Again</button>
             <button id="pong-menu-btn" class="menu-button">Back to Menu</button>
-        </div>
-    </div>
-
-    <!-- Mini Crosswords Game -->
-    <div id="crossword-game" class="game-container hidden">
-        <div class="crossword-wrapper">
-            <div class="crossword-header">
-                <button id="crossword-back-btn" class="back-button">← Menu</button>
-                <div class="header-content">
-                    <h1>mini crosswords</h1>
-                    <div class="crossword-info">
-                        <span>Puzzle <span id="puzzle-number">1</span></span>
-                        <span class="timer">Time: <span id="game-timer">0:00</span></span>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="crossword-container">
-                <div class="crossword-main">
-                    <div id="crossword-grid" class="crossword-grid"></div>
-                    <div class="crossword-controls">
-                        <button id="check-btn" class="control-btn">Check</button>
-                        <button id="reveal-btn" class="control-btn">Reveal</button>
-                        <button id="clear-btn" class="control-btn">Clear</button>
-                        <button id="next-puzzle-btn" class="control-btn primary">Next Puzzle</button>
-                    </div>
-                </div>
-                
-                <div class="crossword-clues">
-                    <div class="clues-section">
-                        <h3>Across</h3>
-                        <div id="across-clues" class="clues-list"></div>
-                    </div>
-                    <div class="clues-section">
-                        <h3>Down</h3>
-                        <div id="down-clues" class="clues-list"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <div id="crossword-complete" class="game-over hidden">
-            <h2>Puzzle Complete! 🎉</h2>
-            <p>Time: <span id="completion-time">0:00</span></p>
-            <button id="crossword-next-btn">Next Puzzle</button>
-            <button id="crossword-menu-btn" class="menu-button">Back to Menu</button>
         </div>
     </div>
     
