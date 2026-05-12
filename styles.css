@@ -5,433 +5,183 @@
 }
 
 body {
-    font-family: 'Arial', sans-serif;
-    background: #000000;
-    color: #ffffff;
+    font-family: 'Courier New', monospace;
+    background: #0a0a0a;
+    color: #00ff00;
     overflow: hidden;
-    -webkit-user-select: none;
-    user-select: none;
-    touch-action: manipulation;
-    position: fixed;
-    width: 100%;
-    height: 100%;
-}
-
-.hidden {
-    display: none !important;
-}
-
-/* Main Menu Styles */
-.main-menu {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 100;
-    overflow-y: auto;
 }
 
-.menu-container {
-    text-align: center;
-    padding: 40px;
-    max-width: 1200px;
-    width: 100%;
-}
-
-.hub-title {
-    font-size: 3rem;
-    color: #4ade80;
-    margin-bottom: 40px;
-    text-shadow: 0 0 20px rgba(74, 222, 128, 0.5);
-}
-
-.games-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 30px;
-    justify-items: center;
-}
-
-.game-card {
-    background: rgba(30, 41, 59, 0.8);
-    border: 2px solid #334155;
-    border-radius: 16px;
-    padding: 40px 30px;
-    width: 100%;
-    max-width: 320px;
-    transition: all 0.3s ease;
-    cursor: pointer;
-}
-
-.game-card:hover {
-    transform: translateY(-5px);
-    border-color: #4ade80;
-    box-shadow: 0 10px 30px rgba(74, 222, 128, 0.3);
-}
-
-.game-icon {
-    font-size: 4rem;
-    margin-bottom: 20px;
-}
-
-.game-name {
-    font-size: 1.8rem;
-    color: #4ade80;
-    margin-bottom: 10px;
-}
-
-.game-description {
-    color: #94a3b8;
-    font-size: 1rem;
-    margin-bottom: 25px;
-    line-height: 1.5;
-}
-
-.play-btn {
-    background: #4ade80;
-    color: #000;
-    border: none;
-    padding: 12px 35px;
-    font-size: 1.1rem;
-    font-weight: bold;
+.terminal {
+    width: 90%;
+    max-width: 1000px;
+    height: 85vh;
+    background: #1a1a1a;
+    border: 2px solid #00ff00;
     border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.3s;
-    width: 100%;
-}
-
-.play-btn:hover {
-    background: #22c55e;
-    transform: scale(1.05);
-    box-shadow: 0 0 20px rgba(74, 222, 128, 0.5);
-}
-
-.play-btn:active {
-    transform: scale(0.95);
-}
-
-/* Game Container */
-.game-container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-}
-
-#game-canvas, #brick-canvas, #pong-canvas {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: block;
-    background: #000000;
-}
-
-.ui-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 5;
-    pointer-events: none;
-    padding: 20px;
-}
-
-.header {
+    box-shadow: 0 0 30px rgba(0, 255, 0, 0.3);
     display: flex;
-    align-items: flex-start;
-    gap: 15px;
-    margin-bottom: 15px;
+    flex-direction: column;
+    overflow: hidden;
 }
 
-.back-button {
-    background: rgba(51, 65, 85, 0.9);
-    color: #4ade80;
-    border: 2px solid #334155;
-    padding: 10px 20px;
-    font-size: 1rem;
+.terminal-header {
+    background: #0d0d0d;
+    padding: 12px 20px;
+    border-bottom: 1px solid #00ff00;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.terminal-title {
     font-weight: bold;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.3s;
-    pointer-events: auto;
+    font-size: 1.1rem;
+    color: #00ff00;
+    text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
 }
 
-.back-button:hover {
-    background: rgba(74, 222, 128, 0.2);
-    border-color: #4ade80;
-    box-shadow: 0 0 15px rgba(74, 222, 128, 0.3);
+.terminal-info {
+    font-size: 0.85rem;
+    color: #00aa00;
 }
 
-.back-button:active {
-    transform: scale(0.95);
-}
-
-.header-content {
+.terminal-output {
     flex: 1;
-    text-align: center;
+    padding: 20px;
+    overflow-y: auto;
+    font-size: 0.95rem;
+    line-height: 1.6;
 }
 
-.header-content h1 {
-    font-size: 2.4rem;
-    color: #4ade80;
+.terminal-output::-webkit-scrollbar {
+    width: 8px;
+}
+
+.terminal-output::-webkit-scrollbar-track {
+    background: #0d0d0d;
+}
+
+.terminal-output::-webkit-scrollbar-thumb {
+    background: #00ff00;
+    border-radius: 4px;
+}
+
+.output-line {
     margin-bottom: 8px;
-    text-shadow: 0 0 10px rgba(74, 222, 128, 0.5);
 }
 
-.header-content p {
-    font-size: 1.1rem;
-    color: #cccccc;
-    text-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
+.command-line {
+    color: #00ff00;
+    margin-bottom: 4px;
 }
 
-.desktop-only {
-    display: block;
+.prompt-char {
+    color: #00ff00;
+    font-weight: bold;
+    margin-right: 8px;
 }
 
-.mobile-only {
-    display: none;
+.response-line {
+    color: #00cc00;
+    margin-left: 16px;
 }
 
-.score-board {
+.error-line {
+    color: #ff4444;
+    margin-left: 16px;
+}
+
+.success-line {
+    color: #00ff88;
+    margin-left: 16px;
+}
+
+.info-line {
+    color: #00aaff;
+    margin-left: 16px;
+}
+
+.app-input-line {
+    color: #ffaa00;
+    margin-left: 16px;
+}
+
+.terminal-input-line {
     display: flex;
-    justify-content: center;
-    gap: 40px;
-    font-size: 1.3rem;
+    align-items: center;
+    padding: 15px 20px;
+    background: #0d0d0d;
+    border-top: 1px solid #00ff00;
+}
+
+.prompt {
+    color: #00ff00;
     font-weight: bold;
-}
-
-.score {
-    color: #4ade80;
-    text-shadow: 0 0 10px rgba(74, 222, 128, 0.5);
-}
-
-.lives {
-    color: #ef4444;
-    text-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
-}
-
-.high-score {
-    color: #fbbf24;
-    text-shadow: 0 0 10px rgba(251, 191, 36, 0.5);
-}
-
-.game-over {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: rgba(0, 0, 0, 0.95);
-    padding: 40px 60px;
-    border-radius: 12px;
-    border: 2px solid #ef4444;
-    box-shadow: 0 0 30px rgba(239, 68, 68, 0.5);
-    z-index: 10;
-    pointer-events: auto;
-}
-
-.game-over h2 {
-    color: #ef4444;
-    font-size: 2rem;
-    margin-bottom: 15px;
-}
-
-.game-over h2.win {
-    color: #4ade80;
-}
-
-.game-over p {
-    font-size: 1.3rem;
-    margin-bottom: 25px;
-    color: #cccccc;
-}
-
-#restart-btn, #brick-restart-btn, #pong-restart-btn {
-    background: #4ade80;
-    color: #000;
-    border: none;
-    padding: 12px 30px;
     font-size: 1.1rem;
-    font-weight: bold;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: all 0.3s;
-    width: 100%;
-    margin-bottom: 10px;
+    margin-right: 10px;
+    text-shadow: 0 0 5px rgba(0, 255, 0, 0.5);
 }
 
-#restart-btn:hover, #brick-restart-btn:hover, #pong-restart-btn:hover {
-    background: #22c55e;
-    transform: scale(1.05);
-    box-shadow: 0 0 15px rgba(74, 222, 128, 0.5);
+.terminal-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #00ff00;
+    font-family: 'Courier New', monospace;
+    font-size: 0.95rem;
+    caret-color: #00ff00;
 }
 
-#restart-btn:active, #brick-restart-btn:active, #pong-restart-btn:active {
-    transform: scale(0.95);
+.terminal-input::selection {
+    background: #00ff00;
+    color: #000;
 }
 
-.menu-button {
-    background: rgba(51, 65, 85, 0.9);
-    color: #94a3b8;
-    border: 2px solid #334155;
-    padding: 10px 30px;
-    font-size: 1rem;
-    font-weight: bold;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: all 0.3s;
-    width: 100%;
+.blink {
+    animation: blink 1s infinite;
 }
 
-.menu-button:hover {
-    background: rgba(51, 65, 85, 1);
-    color: #fff;
-    border-color: #475569;
-}
-
-.menu-button:active {
-    transform: scale(0.95);
+@keyframes blink {
+    0%, 49% { opacity: 1; }
+    50%, 100% { opacity: 0; }
 }
 
 @media (max-width: 768px) {
-    .desktop-only {
-        display: none;
+    .terminal {
+        width: 95%;
+        height: 90vh;
     }
 
-    .mobile-only {
-        display: block;
-    }
-
-    .menu-container {
-        padding: 20px;
-    }
-
-    .hub-title {
-        font-size: 2.2rem;
-        margin-bottom: 30px;
-    }
-
-    .games-grid {
-        gap: 20px;
-    }
-
-    .game-card {
-        padding: 30px 20px;
-    }
-
-    .game-icon {
-        font-size: 3rem;
-    }
-
-    .game-name {
-        font-size: 1.5rem;
-    }
-
-    .game-description {
-        font-size: 0.9rem;
-    }
-
-    .ui-overlay {
-        padding: 15px;
-    }
-
-    .header {
+    .terminal-header {
+        padding: 10px 15px;
         flex-direction: column;
-        align-items: center;
-        gap: 10px;
+        gap: 5px;
+        align-items: flex-start;
     }
 
-    .back-button {
-        padding: 8px 16px;
-        font-size: 0.9rem;
-    }
-
-    .header-content h1 {
-        font-size: 2rem;
-        margin-bottom: 5px;
-    }
-
-    .header-content p {
-        font-size: 0.95rem;
-    }
-
-    .score-board {
-        gap: 20px;
-        font-size: 1.1rem;
-    }
-
-    .game-over {
-        padding: 30px 40px;
-        width: 90%;
-        max-width: 300px;
-    }
-
-    .game-over h2 {
-        font-size: 1.6rem;
-        margin-bottom: 10px;
-    }
-
-    .game-over p {
-        font-size: 1.1rem;
-        margin-bottom: 20px;
-    }
-
-    #restart-btn, #brick-restart-btn, #pong-restart-btn {
-        padding: 10px 25px;
+    .terminal-title {
         font-size: 1rem;
-        -webkit-tap-highlight-color: transparent;
     }
 
-    .menu-button {
-        padding: 8px 25px;
-        font-size: 0.9rem;
-        -webkit-tap-highlight-color: transparent;
-    }
-}
-
-@media (max-width: 480px) {
-    .hub-title {
-        font-size: 1.8rem;
+    .terminal-info {
+        font-size: 0.75rem;
     }
 
-    .ui-overlay {
-        padding: 10px;
-    }
-
-    .back-button {
-        padding: 6px 12px;
+    .terminal-output {
+        padding: 15px;
         font-size: 0.85rem;
     }
 
-    .header-content h1 {
-        font-size: 1.6rem;
+    .terminal-input-line {
+        padding: 12px 15px;
     }
 
-    .header-content p {
+    .terminal-input {
         font-size: 0.85rem;
-    }
-
-    .score-board {
-        font-size: 1rem;
-        gap: 15px;
-    }
-
-    .game-over {
-        padding: 25px 30px;
-    }
-
-    .game-over h2 {
-        font-size: 1.4rem;
-    }
-
-    .game-over p {
-        font-size: 1rem;
     }
 }
