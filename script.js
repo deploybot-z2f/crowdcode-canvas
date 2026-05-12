@@ -688,8 +688,8 @@ class BrickBreakerGame {
             const touch = e.touches[0];
             const rect = this.canvas.getBoundingClientRect();
             const touchX = touch.clientX - rect.left;
-            this.paddle.x = touchX - this.paddle.width / 2;
-            this.paddle.x = Math.max(0, Math.min(this.canvas.width - this.paddle.width, this.paddle.x));
+            this.paddle.targetX = touchX - this.paddle.width / 2;
+            this.paddle.targetX = Math.max(0, Math.min(this.canvas.width - this.paddle.width, this.paddle.targetX));
         }, { passive: false });
         
         this.canvas.addEventListener('touchstart', (e) => {
@@ -703,8 +703,8 @@ class BrickBreakerGame {
     handleMouseMove(e) {
         const rect = this.canvas.getBoundingClientRect();
         const mouseX = e.clientX - rect.left;
-        this.paddle.x = mouseX - this.paddle.width / 2;
-        this.paddle.x = Math.max(0, Math.min(this.canvas.width - this.paddle.width, this.paddle.x));
+        this.paddle.targetX = mouseX - this.paddle.width / 2;
+        this.paddle.targetX = Math.max(0, Math.min(this.canvas.width - this.paddle.width, this.paddle.targetX));
     }
     
     handleKeyPress(e) {
@@ -731,7 +731,9 @@ class BrickBreakerGame {
             height: isMobile ? 12 : 15,
             x: this.canvas.width / 2 - (isMobile ? 50 : 60),
             y: this.canvas.height - (isMobile ? 50 : 80),
-            speed: isMobile ? 8 : 10
+            targetX: this.canvas.width / 2 - (isMobile ? 50 : 60),
+            speed: isMobile ? 4 : 5,
+            smoothing: 0.15
         };
         
         this.ball = {
@@ -740,7 +742,7 @@ class BrickBreakerGame {
             radius: isMobile ? 6 : 8,
             dx: 0,
             dy: 0,
-            speed: isMobile ? 2.5 : 3
+            baseSpeed: isMobile ? 4 : 5
         };
         
         this.bricks = [];
@@ -785,19 +787,24 @@ class BrickBreakerGame {
         if (this.gameOver || !this.gameStarted || this.paused) return;
         
         if (this.keys['ArrowLeft']) {
-            this.paddle.x -= this.paddle.speed;
+            this.paddle.targetX -= this.paddle.speed;
         }
         if (this.keys['ArrowRight']) {
-            this.paddle.x += this.paddle.speed;
+            this.paddle.targetX += this.paddle.speed;
         }
         
-        this.paddle.x = Math.max(0, Math.min(this.canvas.width - this.paddle.width, this.paddle.x));
+        this.paddle.targetX = Math.max(0, Math.min(this.canvas.width - this.paddle.width, this.paddle.targetX));
+        
+        const dx = this.paddle.targetX - this.paddle.x;
+        this.paddle.x += dx * this.paddle.smoothing;
         
         if (this.ball.dy === 0) {
             this.ball.x = this.paddle.x + this.paddle.width / 2;
             this.ball.y = this.paddle.y - this.ball.radius - 5;
-            this.ball.dx = this.ball.speed * (Math.random() * 0.6 + 0.7) * (Math.random() > 0.5 ? 1 : -1);
-            this.ball.dy = -this.ball.speed;
+            
+            const angle = (Math.random() * 0.6 + 0.7) * (Math.random() > 0.5 ? 1 : -1);
+            this.ball.dx = this.ball.baseSpeed * Math.sin(angle);
+            this.ball.dy = -this.ball.baseSpeed * Math.cos(angle);
         } else {
             this.ball.x += this.ball.dx;
             this.ball.y += this.ball.dy;
@@ -818,9 +825,8 @@ class BrickBreakerGame {
             
             const hitPos = (this.ball.x - this.paddle.x) / this.paddle.width;
             const angle = (hitPos - 0.5) * Math.PI / 3;
-            const speed = Math.sqrt(this.ball.dx * this.ball.dx + this.ball.dy * this.ball.dy);
-            this.ball.dx = speed * Math.sin(angle);
-            this.ball.dy = -Math.abs(speed * Math.cos(angle));
+            this.ball.dx = this.ball.baseSpeed * Math.sin(angle);
+            this.ball.dy = -this.ball.baseSpeed * Math.abs(Math.cos(angle));
         }
         
         if (this.ball.y - this.ball.radius > this.canvas.height) {
