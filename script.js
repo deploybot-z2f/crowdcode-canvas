@@ -10,7 +10,12 @@ class TerminalOS {
         
         this.inputElement.addEventListener('keydown', (e) => this.handleInput(e));
         
+        document.addEventListener('click', () => {
+            this.inputElement.focus();
+        });
+        
         this.printWelcome();
+        this.inputElement.focus();
     }
     
     initializeGodApp() {
@@ -114,6 +119,7 @@ Use with: /use ${upperName}`;
             }
             
             this.scrollToBottom();
+            this.inputElement.focus();
         }
     }
     
@@ -257,6 +263,7 @@ Use with: /use ${upperName}`;
     
     clearTerminal() {
         this.outputElement.innerHTML = '';
+        this.inputElement.focus();
     }
     
     updatePrompt() {
