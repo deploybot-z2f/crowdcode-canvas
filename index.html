@@ -3,24 +3,146 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Terminal OS</title>
+    <title>How Crowdcode Works 🚀</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="terminal">
-        <div class="terminal-header">
-            <div class="terminal-title">Terminal OS v1.0</div>
-            <div class="terminal-info">Type 'help' for available commands</div>
-        </div>
-        
-        <div id="output" class="terminal-output"></div>
-        
-        <div class="terminal-input-line">
-            <span class="prompt">$</span>
-            <input type="text" id="input" class="terminal-input" autocomplete="off" autofocus>
-        </div>
+    <div class="container">
+        <header class="hero">
+            <div class="floating-emoji">👥</div>
+            <div class="floating-emoji delay-1">💻</div>
+            <div class="floating-emoji delay-2">✨</div>
+            <h1 class="title">Welcome to <span class="highlight">Crowdcode</span>!</h1>
+            <p class="subtitle">Where many minds code better than one 🧠</p>
+            <div class="scroll-indicator">↓ Scroll to discover ↓</div>
+        </header>
+
+        <section class="section">
+            <div class="card pulse">
+                <div class="icon">🎯</div>
+                <h2>What is Crowdcode?</h2>
+                <p>Imagine a magical coding playground where everyone contributes ideas, and the code gets better with every suggestion!</p>
+                <div class="fun-fact">💡 Think Wikipedia meets GitHub meets Magic!</div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="card slide-in-left">
+                <div class="icon">👨‍💻👩‍💻👨‍💻</div>
+                <h2>Step 1: The Crowd Gathers</h2>
+                <p>Developers from all around the world join forces. Each person brings their unique skills and perspectives.</p>
+                <div class="code-box">
+                    <div class="code-line">Developer A: "Let's add animations!"</div>
+                    <div class="code-line">Developer B: "How about dark mode?"</div>
+                    <div class="code-line">Developer C: "Mobile responsive too!"</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="card slide-in-right">
+                <div class="icon">🔀</div>
+                <h2>Step 2: Ideas Merge & Mix</h2>
+                <p>Like a remix DJ, crowdcode takes everyone's suggestions and blends them into something amazing!</p>
+                <div class="merge-visual">
+                    <div class="idea-bubble">Idea 1</div>
+                    <div class="merge-symbol">+</div>
+                    <div class="idea-bubble">Idea 2</div>
+                    <div class="merge-symbol">+</div>
+                    <div class="idea-bubble">Idea 3</div>
+                    <div class="merge-symbol">=</div>
+                    <div class="idea-bubble result">🎨 Masterpiece!</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="card pulse">
+                <div class="icon">🏗️</div>
+                <h2>Step 3: Building Together</h2>
+                <p>Everyone codes in real-time. It's like a multiplayer video game, but for creating websites!</p>
+                <div class="collaboration-demo">
+                    <div class="coder coder-1">
+                        <span class="coder-icon">🟦</span>
+                        <span>Adding HTML</span>
+                    </div>
+                    <div class="coder coder-2">
+                        <span class="coder-icon">🟩</span>
+                        <span>Styling CSS</span>
+                    </div>
+                    <div class="coder coder-3">
+                        <span class="coder-icon">🟨</span>
+                        <span>Writing JavaScript</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="card slide-in-left">
+                <div class="icon">🎨</div>
+                <h2>Step 4: Instant Magic</h2>
+                <p>Watch your changes come to life immediately! No waiting, no complex setups - just pure creative flow.</p>
+                <div class="magic-box">
+                    <div class="before">Before: Blank Canvas</div>
+                    <div class="sparkles">✨✨✨</div>
+                    <div class="after">After: Beautiful Website!</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="card slide-in-right">
+                <div class="icon">🚀</div>
+                <h2>Step 5: Share & Celebrate!</h2>
+                <p>Your collaborative masterpiece is ready to share with the world. Everyone who contributed gets to celebrate!</p>
+                <div class="celebration">
+                    <span class="confetti">🎉</span>
+                    <span class="confetti">🎊</span>
+                    <span class="confetti">🎈</span>
+                    <span class="confetti">🎆</span>
+                    <span class="confetti">🌟</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="card benefits-card">
+                <h2>Why Crowdcode Rocks! 🎸</h2>
+                <div class="benefits-grid">
+                    <div class="benefit">
+                        <div class="benefit-icon">⚡</div>
+                        <h3>Lightning Fast</h3>
+                        <p>Code together in real-time</p>
+                    </div>
+                    <div class="benefit">
+                        <div class="benefit-icon">🧩</div>
+                        <h3>Better Together</h3>
+                        <p>Two heads > one head</p>
+                    </div>
+                    <div class="benefit">
+                        <div class="benefit-icon">🎓</div>
+                        <h3>Learn While Building</h3>
+                        <p>See different approaches</p>
+                    </div>
+                    <div class="benefit">
+                        <div class="benefit-icon">🌈</div>
+                        <h3>More Creative</h3>
+                        <p>Diverse ideas = Innovation</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="footer">
+            <div class="footer-content">
+                <h2>Ready to Crowdcode? 🚀</h2>
+                <p>Join the community and start building amazing things together!</p>
+                <button class="cta-button" onclick="celebrate()">Let's Code! 🎉</button>
+            </div>
+        </footer>
     </div>
-    
+
     <script src="script.js"></script>
 </body>
 </html>
