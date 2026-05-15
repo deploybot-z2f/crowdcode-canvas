@@ -61,6 +61,37 @@ function createFireworks() {
     }
 }
 
+function createFooterSparkles() {
+    const sparkleContainer = document.querySelector('.sparkle-container');
+    const sparkleEmojis = ['✨', '⭐', '🌟', '💫', '⚡'];
+    
+    for (let i = 0; i < 15; i++) {
+        const sparkle = document.createElement('div');
+        sparkle.className = 'sparkle';
+        sparkle.textContent = sparkleEmojis[Math.floor(Math.random() * sparkleEmojis.length)];
+        sparkle.style.left = Math.random() * 100 + '%';
+        sparkle.style.animationDelay = Math.random() * 3 + 's';
+        sparkle.style.animationDuration = (2 + Math.random() * 2) + 's';
+        sparkleContainer.appendChild(sparkle);
+    }
+}
+
+function createFooterConfetti() {
+    const confettiContainer = document.querySelector('.confetti-container');
+    const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff', '#ff69b4', '#ffa500'];
+    
+    for (let i = 0; i < 30; i++) {
+        const confetti = document.createElement('div');
+        confetti.className = 'confetti-piece';
+        confetti.style.left = Math.random() * 100 + '%';
+        confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+        confetti.style.animationDelay = Math.random() * 4 + 's';
+        confetti.style.animationDuration = (3 + Math.random() * 2) + 's';
+        confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+        confettiContainer.appendChild(confetti);
+    }
+}
+
 const observerOptions = {
     threshold: 0.2,
     rootMargin: '0px'
@@ -83,6 +114,9 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.idea-bubble').forEach((bubble, index) => {
         bubble.style.animationDelay = `${index * 0.2}s`;
     });
+    
+    createFooterSparkles();
+    createFooterConfetti();
 });
 
 let lastScrollY = window.scrollY;
