@@ -7,10 +7,6 @@ const speedRange = document.getElementById('speedRange');
 const speedValue = document.getElementById('speedValue');
 const playPauseBtn = document.getElementById('playPauseBtn');
 const restartBtn = document.getElementById('restartBtn');
-const upBtn = document.getElementById('upBtn');
-const downBtn = document.getElementById('downBtn');
-const leftBtn = document.getElementById('leftBtn');
-const rightBtn = document.getElementById('rightBtn');
 
 const CELL_SIZE = 24;
 const MIN_BOARD_SIZE = 12;
@@ -260,10 +256,6 @@ speedRange.addEventListener('input', () => {
 
 playPauseBtn.addEventListener('click', togglePause);
 restartBtn.addEventListener('click', resetGame);
-upBtn.addEventListener('click', () => setDirection({ x: 0, y: -1 }));
-downBtn.addEventListener('click', () => setDirection({ x: 0, y: 1 }));
-leftBtn.addEventListener('click', () => setDirection({ x: -1, y: 0 }));
-rightBtn.addEventListener('click', () => setDirection({ x: 1, y: 0 }));
 
 window.addEventListener('keydown', (event) => {
     const key = event.key.toLowerCase();
