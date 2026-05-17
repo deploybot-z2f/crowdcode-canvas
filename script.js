@@ -14,6 +14,8 @@ const zoomInBtn = document.getElementById('zoomInBtn');
 const zoomOutBtn = document.getElementById('zoomOutBtn');
 
 const MAX_GENERATIONS_BEFORE_RESTART = 100;
+const RESTART_RANDOM_DENSITY_MIN = 0.12;
+const RESTART_RANDOM_DENSITY_MAX = 0.38;
 
 let cellSize = Number(zoomRange.value);
 let targetGenerationsPerSecond = Number(speedRange.value);
@@ -53,9 +55,9 @@ function createEmptyBoard() {
     return Array.from({ length: rows }, () => Array(cols).fill(0));
 }
 
-function randomizeBoard() {
+function randomizeBoard(density = 0.22) {
     board = Array.from({ length: rows }, () =>
-        Array.from({ length: cols }, () => (Math.random() > 0.78 ? 1 : 0))
+        Array.from({ length: cols }, () => (Math.random() < density ? 1 : 0))
     );
     generation = 0;
     updateCounts();
@@ -80,6 +82,11 @@ function countAlive() {
 function updateCounts() {
     generationCountEl.textContent = String(generation);
     aliveCountEl.textContent = String(countAlive());
+}
+
+function restartWithRandomPattern() {
+    const density = RESTART_RANDOM_DENSITY_MIN + Math.random() * (RESTART_RANDOM_DENSITY_MAX - RESTART_RANDOM_DENSITY_MIN);
+    randomizeBoard(density);
 }
 
 function stepBoard() {
@@ -109,7 +116,7 @@ function stepBoard() {
         running = false;
         playPauseBtn.textContent = 'Restart';
         setTimeout(() => {
-            clearBoard();
+            restartWithRandomPattern();
             running = true;
             playPauseBtn.textContent = 'Pause';
         }, 700);

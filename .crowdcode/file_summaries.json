@@ -5,12 +5,12 @@
       "summary": "Markdown style guide defining shadcn-inspired UI rules, forbidding gradients, and giving implementation hints for the coding agent."
     },
     "index.html": {
-      "hash": "7a0d6668c9b48b49ff6c6c7259d65df55ecd96ebc2e31f75e6375612cc727be7",
-      "summary": "Full HTML file for the Game of Life app with updated restart text to 100 generations and the same larger board layout."
+      "hash": "bc31d5a1ae704f9037e22d2ff7e069da5fcc4ee97745a25ef9dd0ff541ffee3d",
+      "summary": "Full HTML file for the Game of Life app with the restart description updated to a random pattern after 100 generations."
     },
     "script.js": {
-      "hash": "4bd3fa7136afa9b83df9940cc6c3b9205cf067c2424c89b1c59aeedc4b762d1d",
-      "summary": "Full JavaScript file for the Game of Life app with the auto-restart limit changed to 100 generations and the existing board sizing behavior preserved."
+      "hash": "bb1c5fad236e3dd7d1a5b388c567365ff166c734c62381090ebb68f049bc68ae",
+      "summary": "Full JavaScript file for the Game of Life app with auto-restart changed to repopulate the board with a random density of live cells instead of clearing it."
     },
     "styles.css": {
       "hash": "d7d84cf1ca703cbfa1af6259a24157e71cddd11d882da64b72d760d5e7dc1a88",
