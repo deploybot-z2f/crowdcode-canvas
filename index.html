@@ -7,101 +7,61 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <main class="page-shell">
-        <header class="hero compact-panel">
-            <div class="floating-emoji">👥</div>
-            <div class="floating-emoji delay-1">💻</div>
-            <div class="floating-emoji delay-2">✨</div>
-            <h1 class="title">Welcome to <span class="highlight">Crowdcode</span>!</h1>
-            <p class="subtitle">Many minds, one better code 🧠</p>
-            <p class="mini-copy">All the magic, all on one screen — no scrolling needed.</p>
+    <div class="container">
+        <header class="hero">
+            <h1>Welcome to <span class="highlight">Crowdcode</span>! 🚀</h1>
+            <p class="tagline">Many minds, one better code</p>
         </header>
 
-        <section class="grid-layout">
-            <div class="card compact-card pulse">
-                <div class="icon">🎯</div>
-                <h2>What is Crowdcode?</h2>
-                <p>A collaborative coding space where ideas combine instantly into something awesome.</p>
+        <main class="content">
+            <div class="step-card">
+                <div class="step-number">1</div>
+                <h3>Share Ideas</h3>
+                <p>The crowd gathers and brainstorms together</p>
             </div>
 
-            <div class="card compact-card">
-                <div class="icon">👨‍💻👩‍💻</div>
-                <h2>Step 1</h2>
-                <p>The crowd gathers and shares ideas in real time.</p>
-                <div class="code-box">
-                    <div class="code-line">Add animations</div>
-                    <div class="code-line">Try dark mode</div>
-                    <div class="code-line">Make it mobile friendly</div>
+            <div class="step-card">
+                <div class="step-number">2</div>
+                <h3>Merge Solutions</h3>
+                <p>Ideas combine into one polished direction</p>
+            </div>
+
+            <div class="step-card">
+                <div class="step-number">3</div>
+                <h3>Build Together</h3>
+                <p>Everyone codes across HTML, CSS, and JS</p>
+            </div>
+
+            <div class="step-card">
+                <div class="step-number">4</div>
+                <h3>See Magic</h3>
+                <p>Changes appear instantly on the canvas</p>
+            </div>
+
+            <div class="benefits-box">
+                <div class="benefit-item">
+                    <div class="emoji">⚡</div>
+                    <span>Fast</span>
+                </div>
+                <div class="benefit-item">
+                    <div class="emoji">🧩</div>
+                    <span>Together</span>
+                </div>
+                <div class="benefit-item">
+                    <div class="emoji">🎓</div>
+                    <span>Learn</span>
+                </div>
+                <div class="benefit-item">
+                    <div class="emoji">🌈</div>
+                    <span>Create</span>
                 </div>
             </div>
+        </main>
 
-            <div class="card compact-card">
-                <div class="icon">🔀</div>
-                <h2>Step 2</h2>
-                <p>Ideas merge into one polished direction.</p>
-                <div class="merge-visual compact-merge">
-                    <div class="idea-bubble">Idea</div>
-                    <div class="merge-symbol">+</div>
-                    <div class="idea-bubble">Idea</div>
-                    <div class="merge-symbol">=</div>
-                    <div class="idea-bubble result">Masterpiece</div>
-                </div>
-            </div>
-
-            <div class="card compact-card">
-                <div class="icon">🏗️</div>
-                <h2>Step 3</h2>
-                <p>Everyone builds together across HTML, CSS, and JavaScript.</p>
-                <div class="collaboration-demo compact-demo">
-                    <div class="coder"><span class="coder-icon">🟦</span><span>HTML</span></div>
-                    <div class="coder"><span class="coder-icon">🟩</span><span>CSS</span></div>
-                    <div class="coder"><span class="coder-icon">🟥</span><span>JS</span></div>
-                </div>
-            </div>
-
-            <div class="card compact-card">
-                <div class="icon">🎨</div>
-                <h2>Step 4</h2>
-                <p>Changes appear instantly, making creation feel magical.</p>
-                <div class="magic-box compact-magic">
-                    <div class="before">Before</div>
-                    <div class="sparkles">✨</div>
-                    <div class="after">After</div>
-                </div>
-            </div>
-
-            <div class="card compact-card benefits-card">
-                <h2>Why It Rocks</h2>
-                <div class="benefits-grid compact-benefits">
-                    <div class="benefit">
-                        <div class="benefit-icon">⚡</div>
-                        <h3>Fast</h3>
-                    </div>
-                    <div class="benefit">
-                        <div class="benefit-icon">🧩</div>
-                        <h3>Together</h3>
-                    </div>
-                    <div class="benefit">
-                        <div class="benefit-icon">🎓</div>
-                        <h3>Learn</h3>
-                    </div>
-                    <div class="benefit">
-                        <div class="benefit-icon">🌈</div>
-                        <h3>Create</h3>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <footer class="footer compact-footer">
-            <div class="sparkle-container"></div>
-            <div class="confetti-container"></div>
-            <div class="footer-content">
-                <h2>Ready to Crowdcode? 🚀</h2>
-                <button class="cta-button" onclick="celebrate()">Let's Code! 🎉</button>
-            </div>
+        <footer class="footer">
+            <button class="cta-button" onclick="celebrate()">Let's Code Together! 🎉</button>
         </footer>
-    </main>
+    </div>
 
     <script src="script.js"></script>
 </body>
