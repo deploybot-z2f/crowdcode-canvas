@@ -13,28 +13,34 @@ html, body {
 
 body {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .container {
-    width: 100vw;
+    width: 100%;
+    max-width: 1200px;
     height: 100vh;
     display: flex;
     flex-direction: column;
-    padding: 2rem;
-    gap: 1.5rem;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(1rem, 3vw, 2.5rem);
+    gap: clamp(1rem, 2.5vh, 2rem);
 }
 
 .hero {
     text-align: center;
-    flex-shrink: 0;
 }
 
 .hero h1 {
-    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-size: clamp(1.75rem, 4vw, 3rem);
     color: white;
     font-weight: 800;
     margin-bottom: 0.5rem;
     text-shadow: 2px 2px 8px rgba(0,0,0,0.2);
+    line-height: 1.2;
 }
 
 .highlight {
@@ -45,227 +51,124 @@ body {
 }
 
 .tagline {
-    font-size: clamp(1rem, 2vw, 1.3rem);
+    font-size: clamp(0.9rem, 1.8vw, 1.2rem);
     color: rgba(255,255,255,0.95);
 }
 
-.content {
-    flex: 1;
+.steps-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: 1fr auto;
-    gap: 1rem;
-    min-height: 0;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: clamp(0.75rem, 1.5vw, 1.5rem);
+    width: 100%;
+    max-width: 900px;
 }
 
 .step-card {
     background: white;
-    border-radius: 20px;
-    padding: 1.5rem;
+    border-radius: 16px;
+    padding: clamp(1rem, 2vh, 1.5rem);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     text-align: center;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-    transition: transform 0.3s ease;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .step-card:hover {
     transform: translateY(-5px);
+    box-shadow: 0 12px 32px rgba(0,0,0,0.2);
 }
 
 .step-number {
-    width: 50px;
-    height: 50px;
+    width: clamp(40px, 6vw, 50px);
+    height: clamp(40px, 6vw, 50px);
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.5rem;
+    font-size: clamp(1.2rem, 2vw, 1.5rem);
     font-weight: bold;
-    margin-bottom: 1rem;
+    margin-bottom: 0.75rem;
 }
 
 .step-card h3 {
-    font-size: 1.2rem;
+    font-size: clamp(1rem, 1.8vw, 1.2rem);
     color: #333;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.4rem;
+    font-weight: 700;
 }
 
 .step-card p {
-    font-size: 0.95rem;
+    font-size: clamp(0.8rem, 1.4vw, 0.95rem);
     color: #666;
     line-height: 1.4;
 }
 
-.benefits-box {
-    grid-column: 1 / -1;
-    background: rgba(255,255,255,0.15);
-    backdrop-filter: blur(10px);
-    border-radius: 20px;
-    padding: 1.5rem;
+.benefits {
     display: flex;
-    justify-content: space-around;
+    gap: clamp(1.5rem, 4vw, 3rem);
+    justify-content: center;
     align-items: center;
-    gap: 2rem;
+    flex-wrap: wrap;
 }
 
-.benefit-item {
+.benefit {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.4rem;
     color: white;
+    font-size: clamp(2rem, 3vw, 2.5rem);
 }
 
-.emoji {
-    font-size: 2.5rem;
-}
-
-.benefit-item span {
-    font-size: 1.1rem;
+.benefit span {
+    font-size: clamp(0.85rem, 1.5vw, 1rem);
     font-weight: 600;
-}
-
-.footer {
-    text-align: center;
-    flex-shrink: 0;
 }
 
 .cta-button {
     background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
     color: white;
     border: none;
-    padding: 1rem 2.5rem;
-    font-size: 1.2rem;
+    padding: clamp(0.75rem, 1.5vh, 1rem) clamp(1.5rem, 3vw, 2.5rem);
+    font-size: clamp(1rem, 1.8vw, 1.2rem);
     font-weight: bold;
     border-radius: 50px;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 10px 40px rgba(245,87,108,0.4);
+    box-shadow: 0 8px 24px rgba(245,87,108,0.4);
 }
 
 .cta-button:hover {
     transform: scale(1.05);
-    box-shadow: 0 15px 50px rgba(245,87,108,0.6);
+    box-shadow: 0 12px 32px rgba(245,87,108,0.6);
 }
 
 .cta-button:active {
     transform: scale(0.98);
 }
 
-@media (max-width: 1200px) {
-    .container {
-        padding: 1.5rem;
-        gap: 1rem;
-    }
-
-    .content {
-        grid-template-columns: repeat(2, 1fr);
-        grid-template-rows: repeat(2, 1fr) auto;
-    }
-
-    .step-card {
-        padding: 1rem;
-    }
-
-    .step-number {
-        width: 40px;
-        height: 40px;
-        font-size: 1.2rem;
-        margin-bottom: 0.8rem;
-    }
-
-    .step-card h3 {
-        font-size: 1rem;
-    }
-
-    .step-card p {
-        font-size: 0.85rem;
-    }
-
-    .benefits-box {
-        gap: 1rem;
-    }
-
-    .emoji {
-        font-size: 2rem;
-    }
-
-    .benefit-item span {
-        font-size: 0.95rem;
-    }
-}
-
 @media (max-width: 768px) {
-    .container {
-        padding: 1rem;
-        gap: 0.8rem;
-    }
-
-    .hero h1 {
-        font-size: 1.8rem;
-    }
-
-    .tagline {
-        font-size: 0.95rem;
-    }
-
-    .content {
-        grid-template-columns: 1fr 1fr;
-        grid-template-rows: repeat(2, 1fr) auto;
-        gap: 0.8rem;
-    }
-
-    .step-card {
-        padding: 0.8rem;
-    }
-
-    .step-number {
-        width: 35px;
-        height: 35px;
-        font-size: 1rem;
-        margin-bottom: 0.5rem;
-    }
-
-    .step-card h3 {
-        font-size: 0.9rem;
-        margin-bottom: 0.3rem;
-    }
-
-    .step-card p {
-        font-size: 0.75rem;
-    }
-
-    .benefits-box {
-        padding: 1rem;
-        gap: 0.5rem;
-    }
-
-    .emoji {
-        font-size: 1.5rem;
-    }
-
-    .benefit-item span {
-        font-size: 0.8rem;
-    }
-
-    .cta-button {
-        padding: 0.8rem 2rem;
-        font-size: 1rem;
+    .steps-grid {
+        grid-template-columns: repeat(2, 1fr);
     }
 }
 
 @media (max-width: 480px) {
-    .benefits-box {
-        flex-wrap: wrap;
-        gap: 1rem;
+    .steps-grid {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
     }
-
-    .benefit-item {
-        flex: 0 0 calc(50% - 0.5rem);
+    
+    .step-card {
+        padding: 1rem;
+    }
+    
+    .benefits {
+        gap: 1.5rem;
     }
 }
