@@ -13,6 +13,8 @@ const randomBtn = document.getElementById('randomBtn');
 const zoomInBtn = document.getElementById('zoomInBtn');
 const zoomOutBtn = document.getElementById('zoomOutBtn');
 
+const MAX_GENERATIONS_BEFORE_RESTART = 100;
+
 let cellSize = Number(zoomRange.value);
 let targetGenerationsPerSecond = Number(speedRange.value);
 let running = true;
@@ -103,7 +105,7 @@ function stepBoard() {
     board = next;
     generation += 1;
 
-    if (generation >= 1000) {
+    if (generation >= MAX_GENERATIONS_BEFORE_RESTART) {
         running = false;
         playPauseBtn.textContent = 'Restart';
         setTimeout(() => {

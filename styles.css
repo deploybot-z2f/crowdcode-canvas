@@ -34,9 +34,9 @@ button, input {
 }
 
 .app-shell {
-    width: min(1400px, calc(100% - 32px));
+    width: min(1600px, calc(100% - 24px));
     margin: 0 auto;
-    padding: 16px 0 24px;
+    padding: 12px 0 20px;
 }
 
 .card {
@@ -52,7 +52,7 @@ button, input {
     justify-content: space-between;
     gap: 20px;
     padding: 20px;
-    margin-bottom: 16px;
+    margin-bottom: 12px;
 }
 
 .eyebrow {
@@ -107,21 +107,21 @@ h1 {
 .main-layout {
     display: grid;
     grid-template-columns: minmax(0, 1fr) 320px;
-    gap: 16px;
+    gap: 12px;
     align-items: start;
 }
 
 .board-panel {
     position: relative;
-    padding: 12px;
-    min-height: 640px;
+    padding: 10px;
+    min-height: 760px;
 }
 
 #lifeCanvas {
     display: block;
     width: 100%;
-    height: calc(100vh - 170px);
-    min-height: 600px;
+    height: calc(100vh - 140px);
+    min-height: 720px;
     border-radius: 16px;
     background: #ffffff;
     border: 1px solid var(--border);
@@ -148,7 +148,7 @@ h1 {
     flex-direction: column;
     gap: 18px;
     position: sticky;
-    top: 16px;
+    top: 12px;
 }
 
 .control-group label {
