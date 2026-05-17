@@ -117,7 +117,7 @@ h1 {
     min-height: 760px;
 }
 
-#lifeCanvas {
+#snakeCanvas {
     display: block;
     width: 100%;
     height: calc(100vh - 140px);
@@ -125,7 +125,6 @@ h1 {
     border-radius: 16px;
     background: #ffffff;
     border: 1px solid var(--border);
-    cursor: crosshair;
     touch-action: none;
 }
 
@@ -253,7 +252,7 @@ button:active {
         position: static;
     }
 
-    #lifeCanvas {
+    #snakeCanvas {
         height: 68vh;
         min-height: 460px;
     }
@@ -278,7 +277,7 @@ button:active {
         flex: 1 1 140px;
     }
 
-    #lifeCanvas {
+    #snakeCanvas {
         height: 56vh;
         min-height: 380px;
     }

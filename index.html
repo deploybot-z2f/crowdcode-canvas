@@ -3,70 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Conway's Game of Life Simulation</title>
+    <title>Snake Game</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="app-shell">
         <header class="topbar card">
             <div>
-                <p class="eyebrow">Interactive simulation</p>
-                <h1>Conway's Game of Life</h1>
-                <p class="subtitle">Speed up time, zoom in and out, and watch the board automatically restart with a random pattern after 100 generations.</p>
+                <p class="eyebrow">Classic arcade game</p>
+                <h1>Snake</h1>
+                <p class="subtitle">Guide the snake to eat food, grow longer, and avoid crashing into yourself. Use the controls to pause, restart, or adjust the speed.</p>
             </div>
             <div class="stats">
                 <div class="stat">
-                    <span class="stat-label">Generation</span>
-                    <span id="generationCount" class="stat-value">0</span>
+                    <span class="stat-label">Score</span>
+                    <span id="scoreCount" class="stat-value">0</span>
                 </div>
                 <div class="stat">
-                    <span class="stat-label">Alive cells</span>
-                    <span id="aliveCount" class="stat-value">0</span>
+                    <span class="stat-label">Best</span>
+                    <span id="bestCount" class="stat-value">0</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">Status</span>
+                    <span id="statusText" class="stat-value">Playing</span>
                 </div>
             </div>
         </header>
 
         <main class="main-layout">
             <section class="board-panel card">
-                <canvas id="lifeCanvas" aria-label="Conway's Game of Life board"></canvas>
-                <div class="overlay-hint">Click the board to toggle cells. Drag to paint while holding the mouse button.</div>
+                <canvas id="snakeCanvas" aria-label="Snake game board"></canvas>
+                <div class="overlay-hint">Use arrow keys or WASD to move. Press Space to pause or resume.</div>
             </section>
 
             <aside class="controls card">
                 <div class="control-group">
                     <label for="speedRange">Speed</label>
                     <div class="range-row">
-                        <input id="speedRange" type="range" min="1" max="60" value="12">
-                        <span id="speedValue" class="control-value">12 gen/s</span>
-                    </div>
-                </div>
-
-                <div class="control-group">
-                    <label for="zoomRange">Zoom</label>
-                    <div class="range-row">
-                        <input id="zoomRange" type="range" min="6" max="28" value="12">
-                        <span id="zoomValue" class="control-value">12 px/cell</span>
-                    </div>
-                    <div class="button-row">
-                        <button id="zoomOutBtn" class="secondary-button" type="button">Zoom out</button>
-                        <button id="zoomInBtn" class="secondary-button" type="button">Zoom in</button>
+                        <input id="speedRange" type="range" min="4" max="20" value="10">
+                        <span id="speedValue" class="control-value">10 steps/s</span>
                     </div>
                 </div>
 
                 <div class="button-row primary-row">
                     <button id="playPauseBtn" class="primary-button" type="button">Pause</button>
-                    <button id="stepBtn" class="secondary-button" type="button">Step</button>
+                    <button id="restartBtn" class="secondary-button" type="button">Restart</button>
                 </div>
 
                 <div class="button-row">
-                    <button id="clearBtn" class="secondary-button" type="button">Clear</button>
-                    <button id="randomBtn" class="secondary-button" type="button">Randomize</button>
+                    <button id="upBtn" class="secondary-button" type="button">Up</button>
+                    <button id="downBtn" class="secondary-button" type="button">Down</button>
+                </div>
+
+                <div class="button-row">
+                    <button id="leftBtn" class="secondary-button" type="button">Left</button>
+                    <button id="rightBtn" class="secondary-button" type="button">Right</button>
                 </div>
 
                 <div class="meta-list">
-                    <div class="meta-item"><span class="dot"></span>Auto restarts every 100 generations with a random pattern</div>
-                    <div class="meta-item"><span class="dot"></span>Board wraps around at the edges</div>
-                    <div class="meta-item"><span class="dot"></span>Board resizes with zoom changes</div>
+                    <div class="meta-item"><span class="dot"></span>Eat food to grow and increase your score</div>
+                    <div class="meta-item"><span class="dot"></span>Hitting a wall or your tail ends the round</div>
+                    <div class="meta-item"><span class="dot"></span>Speed control adjusts how quickly the snake moves</div>
                 </div>
             </aside>
         </main>

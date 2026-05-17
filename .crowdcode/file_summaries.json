@@ -5,16 +5,16 @@
       "summary": "Markdown style guide defining shadcn-inspired UI rules, forbidding gradients, and giving implementation hints for the coding agent."
     },
     "index.html": {
-      "hash": "bc31d5a1ae704f9037e22d2ff7e069da5fcc4ee97745a25ef9dd0ff541ffee3d",
-      "summary": "Full HTML file for the Game of Life app with the restart description updated to a random pattern after 100 generations."
+      "hash": "3555773f1e616a89079df76cdfdbd066c917d393864940686aaa024c3219cafe",
+      "summary": "Full HTML file for the Snake game with score, best score, status, speed control, on-screen direction buttons, and a game canvas."
     },
     "script.js": {
-      "hash": "bb1c5fad236e3dd7d1a5b388c567365ff166c734c62381090ebb68f049bc68ae",
-      "summary": "Full JavaScript file for the Game of Life app with auto-restart changed to repopulate the board with a random density of live cells instead of clearing it."
+      "hash": "c131a8f3aae429ad61f9949c78172cb2f4f59b93251bfd94699c6e38bfc092f8",
+      "summary": "Full JavaScript file for the Snake game with movement, food spawning, collision detection, scoring, pause/resume, restart, keyboard controls, and speed adjustment."
     },
     "styles.css": {
-      "hash": "d7d84cf1ca703cbfa1af6259a24157e71cddd11d882da64b72d760d5e7dc1a88",
-      "summary": "Full stylesheet for the Game of Life app with a larger board area and slightly tighter surrounding layout so the simulation canvas appears bigger on screen."
+      "hash": "ef8cc962274522d9de29181acbed6e23ad17f0b7114ee8cc7d6937b9f6009796",
+      "summary": "Full stylesheet for the Snake game with a polished shadcn-inspired layout, large responsive playfield, and controls styled for the arcade interface."
     }
   }
 }
