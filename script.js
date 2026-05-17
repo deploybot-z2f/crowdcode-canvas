@@ -2,32 +2,34 @@ function celebrate() {
     const button = document.querySelector('.cta-button');
     
     button.textContent = '🎊 Amazing! 🎊';
-    button.style.background = 'linear-gradient(135deg, #11998e 0%, #38ef7d 100%)';
+    button.style.background = '#0f172a';
+    button.style.borderColor = '#0f172a';
     
     createFireworks();
     
     setTimeout(() => {
         button.textContent = "Let's Code Together! 🎉";
-        button.style.background = 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)';
+        button.style.background = '#111827';
+        button.style.borderColor = '#111827';
     }, 3000);
 }
 
 function createFireworks() {
-    const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff', '#ffa500', '#ff69b4'];
+    const colors = ['#111827', '#334155', '#475569', '#0f172a', '#1e293b', '#64748b'];
     
-    for (let i = 0; i < 30; i++) {
+    for (let i = 0; i < 24; i++) {
         setTimeout(() => {
             const firework = document.createElement('div');
             firework.style.position = 'fixed';
             firework.style.left = Math.random() * window.innerWidth + 'px';
             firework.style.top = Math.random() * window.innerHeight + 'px';
-            firework.style.width = '12px';
-            firework.style.height = '12px';
-            firework.style.borderRadius = '50%';
+            firework.style.width = '10px';
+            firework.style.height = '10px';
+            firework.style.borderRadius = '9999px';
             firework.style.background = colors[Math.floor(Math.random() * colors.length)];
             firework.style.pointerEvents = 'none';
             firework.style.zIndex = '9999';
-            firework.style.boxShadow = '0 0 15px currentColor';
+            firework.style.boxShadow = '0 0 12px rgba(15, 23, 42, 0.35)';
             
             document.body.appendChild(firework);
             

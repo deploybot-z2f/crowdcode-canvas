@@ -1,16 +1,20 @@
 {
   "files": {
+    "STYLE_GUIDE.md": {
+      "hash": "088e04ac1e58f45d7b4364500b4e6494f5a6532cfe0237425815db390437bb1e",
+      "summary": "Markdown style guide defining shadcn-inspired UI rules, forbidding gradients, and giving implementation hints for the coding agent."
+    },
     "index.html": {
       "hash": "e82f9d0cd14fdb50450cadc35a6fac181729a8c205c8db8114b588b8df4d68b5",
-      "summary": "Full HTML page for Crowdcode with the benefits section restored to the lightning emoji while preserving the updated layout and content."
+      "summary": "Full Crowdcode landing page updated to align with a cleaner, shadcn-inspired presentation while preserving the existing structure and content."
     },
     "script.js": {
-      "hash": "277a0e7acbd799d762622dea26527ea8a63765cca53b5b0793274f7b463daa68",
-      "summary": "JavaScript updated so the celebration button uses new emojis during and after the animation."
+      "hash": "20482de31f6651c24a2128d92402c0879af54d32def3002a330a1ac5e2900076",
+      "summary": "JavaScript celebration effect updated to avoid gradients and use solid shadcn-like neutral colors for the button state changes and particles."
     },
     "styles.css": {
-      "hash": "0f3658ab681329bb9a0cf1ccef67e2752ec376f5296547825c591744eb3afba2",
-      "summary": "css file; * { margin: 0; padding: 0;"
+      "hash": "7c13355ea64dedd165c02b56a0179197add22fcd541f4c22d2f3dc01271ad6bf",
+      "summary": "Styles rewritten to remove gradients and shift the demo toward a cleaner shadcn-inspired neutral palette with subtle borders and shadows."
     }
   }
 }
