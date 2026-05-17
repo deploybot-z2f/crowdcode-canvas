@@ -1,0 +1,16 @@
+{
+  "files": {
+    "index.html": {
+      "hash": "e0b0501e797fc1c3267efbb3fdbf66070d19ca45dce31f3387f5778713510836",
+      "summary": "Full HTML converted into a single-screen, no-scroll layout with compact hero, grid-based cards, and a simplified footer CTA."
+    },
+    "script.js": {
+      "hash": "c9212bbf973c8d99c7b98dfabea776618c6bdaf66449ccc2c3a66f15335f5717",
+      "summary": "Full JS simplified to remove scroll behavior and keep only the CTA celebration effects, sparkles, and confetti for the single-page layout."
+    },
+    "styles.css": {
+      "hash": "0088c588f49a0654a3917576eb2ea8bcd53d741f39f9e5bc6e72a7fc1ba8ff89",
+      "summary": "Full CSS changed to lock the page to one viewport, remove scrolling, and compress all sections into a responsive grid that fits on a single screen."
+    }
+  }
+}
