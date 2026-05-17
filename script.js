@@ -1,7 +1,7 @@
 function celebrate() {
     const button = document.querySelector('.cta-button');
     
-    button.textContent = '🎉 Amazing! 🎉';
+    button.textContent = '🎊 Amazing! 🎊';
     button.style.background = 'linear-gradient(135deg, #11998e 0%, #38ef7d 100%)';
     
     createFireworks();

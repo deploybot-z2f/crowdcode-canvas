@@ -1,16 +1,16 @@
 {
   "files": {
     "index.html": {
-      "hash": "e0b0501e797fc1c3267efbb3fdbf66070d19ca45dce31f3387f5778713510836",
-      "summary": "Full HTML converted into a single-screen, no-scroll layout with compact hero, grid-based cards, and a simplified footer CTA."
+      "hash": "e82f9d0cd14fdb50450cadc35a6fac181729a8c205c8db8114b588b8df4d68b5",
+      "summary": "HTML page updated with new emojis in the title, hero heading, benefits icons, and CTA button."
     },
     "script.js": {
-      "hash": "c9212bbf973c8d99c7b98dfabea776618c6bdaf66449ccc2c3a66f15335f5717",
-      "summary": "Full JS simplified to remove scroll behavior and keep only the CTA celebration effects, sparkles, and confetti for the single-page layout."
+      "hash": "277a0e7acbd799d762622dea26527ea8a63765cca53b5b0793274f7b463daa68",
+      "summary": "JavaScript updated so the celebration button uses new emojis during and after the animation."
     },
     "styles.css": {
-      "hash": "0088c588f49a0654a3917576eb2ea8bcd53d741f39f9e5bc6e72a7fc1ba8ff89",
-      "summary": "Full CSS changed to lock the page to one viewport, remove scrolling, and compress all sections into a responsive grid that fits on a single screen."
+      "hash": "0f3658ab681329bb9a0cf1ccef67e2752ec376f5296547825c591744eb3afba2",
+      "summary": "css file; * { margin: 0; padding: 0;"
     }
   }
 }
