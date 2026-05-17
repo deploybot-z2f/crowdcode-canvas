@@ -12,8 +12,8 @@ const downBtn = document.getElementById('downBtn');
 const leftBtn = document.getElementById('leftBtn');
 const rightBtn = document.getElementById('rightBtn');
 
-const GRID_SIZE = 24;
 const CELL_SIZE = 24;
+const MIN_BOARD_SIZE = 12;
 
 let bestScore = 0;
 let running = true;
@@ -21,55 +21,15 @@ let stepsPerSecond = Number(speedRange.value);
 let accumulator = 0;
 let lastTimestamp = 0;
 let gameOver = false;
+let initialized = false;
 
-let boardCols = GRID_SIZE;
-let boardRows = GRID_SIZE;
+let boardCols = MIN_BOARD_SIZE;
+let boardRows = MIN_BOARD_SIZE;
 let snake = [];
 let direction = { x: 1, y: 0 };
 let nextDirection = { x: 1, y: 0 };
 let food = { x: 0, y: 0 };
 let score = 0;
-
-function resizeCanvas() {
-    const rect = canvas.getBoundingClientRect();
-    const maxWidth = rect.width;
-    const maxHeight = rect.height;
-    boardCols = Math.max(12, Math.floor(maxWidth / CELL_SIZE));
-    boardRows = Math.max(12, Math.floor(maxHeight / CELL_SIZE));
-
-    canvas.width = Math.floor(boardCols * CELL_SIZE * window.devicePixelRatio);
-    canvas.height = Math.floor(boardRows * CELL_SIZE * window.devicePixelRatio);
-    ctx.setTransform(window.devicePixelRatio, 0, 0, window.devicePixelRatio, 0, 0);
-
-    if (!snake.length) {
-        resetGame();
-    } else {
-        snake = snake.filter(segment => segment.x < boardCols && segment.y < boardRows);
-        if (!snake.length) resetGame();
-        spawnFood();
-        draw();
-    }
-}
-
-function resetGame() {
-    const startX = Math.floor(boardCols / 2);
-    const startY = Math.floor(boardRows / 2);
-    snake = [
-        { x: startX, y: startY },
-        { x: startX - 1, y: startY },
-        { x: startX - 2, y: startY },
-    ];
-    direction = { x: 1, y: 0 };
-    nextDirection = { x: 1, y: 0 };
-    score = 0;
-    gameOver = false;
-    running = true;
-    playPauseBtn.textContent = 'Pause';
-    statusTextEl.textContent = 'Playing';
-    spawnFood();
-    updateHud();
-    draw();
-}
 
 function updateHud() {
     scoreCountEl.textContent = String(score);
@@ -80,20 +40,153 @@ function setStatus(text) {
     statusTextEl.textContent = text;
 }
 
+function isOpposite(a, b) {
+    return a.x === -b.x && a.y === -b.y;
+}
+
+function drawCell(x, y, color) {
+    ctx.fillStyle = color;
+    ctx.fillRect(x * CELL_SIZE + 1, y * CELL_SIZE + 1, CELL_SIZE - 2, CELL_SIZE - 2);
+}
+
 function spawnFood() {
     const occupied = new Set(snake.map(segment => `${segment.x},${segment.y}`));
     let attempts = 0;
+
     do {
         food = {
             x: Math.floor(Math.random() * boardCols),
             y: Math.floor(Math.random() * boardRows),
         };
         attempts += 1;
-    } while (occupied.has(`${food.x},${food.y}`) && attempts < 500);
+    } while (occupied.has(`${food.x},${food.y}`) && attempts < 1000);
 }
 
-function isOpposite(a, b) {
-    return a.x === -b.x && a.y === -b.y;
+function draw() {
+    const width = boardCols * CELL_SIZE;
+    const height = boardRows * CELL_SIZE;
+
+    ctx.clearRect(0, 0, width, height);
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, width, height);
+
+    ctx.strokeStyle = 'rgba(148, 163, 184, 0.18)';
+    ctx.lineWidth = 1;
+
+    for (let x = 0; x <= boardCols; x += 1) {
+        ctx.beginPath();
+        ctx.moveTo(x * CELL_SIZE + 0.5, 0);
+        ctx.lineTo(x * CELL_SIZE + 0.5, height);
+        ctx.stroke();
+    }
+
+    for (let y = 0; y <= boardRows; y += 1) {
+        ctx.beginPath();
+        ctx.moveTo(0, y * CELL_SIZE + 0.5);
+        ctx.lineTo(width, y * CELL_SIZE + 0.5);
+        ctx.stroke();
+    }
+
+    drawCell(food.x, food.y, '#ef4444');
+
+    snake.forEach((segment, index) => {
+        drawCell(segment.x, segment.y, index === 0 ? '#0f172a' : '#334155');
+    });
+
+    if (gameOver) {
+        ctx.fillStyle = 'rgba(15, 23, 42, 0.75)';
+        ctx.fillRect(0, 0, width, height);
+        ctx.fillStyle = '#ffffff';
+        ctx.textAlign = 'center';
+        ctx.font = '700 28px system-ui, sans-serif';
+        ctx.fillText('Game Over', width / 2, height / 2 - 8);
+        ctx.font = '500 16px system-ui, sans-serif';
+        ctx.fillText('Press Restart to play again', width / 2, height / 2 + 22);
+    }
+}
+
+function resetGame() {
+    const startX = Math.floor(boardCols / 2);
+    const startY = Math.floor(boardRows / 2);
+
+    snake = [
+        { x: startX, y: startY },
+        { x: Math.max(0, startX - 1), y: startY },
+        { x: Math.max(0, startX - 2), y: startY },
+    ];
+
+    direction = { x: 1, y: 0 };
+    nextDirection = { x: 1, y: 0 };
+    score = 0;
+    gameOver = false;
+    running = true;
+    accumulator = 0;
+
+    playPauseBtn.textContent = 'Pause';
+    setStatus('Playing');
+    spawnFood();
+    updateHud();
+    draw();
+}
+
+function setCanvasSize() {
+    const rect = canvas.getBoundingClientRect();
+    const dpr = Math.max(1, window.devicePixelRatio || 1);
+
+    if (rect.width === 0 || rect.height === 0) {
+        return false;
+    }
+
+    boardCols = Math.max(MIN_BOARD_SIZE, Math.floor(rect.width / CELL_SIZE));
+    boardRows = Math.max(MIN_BOARD_SIZE, Math.floor(rect.height / CELL_SIZE));
+
+    const displayWidth = boardCols * CELL_SIZE;
+    const displayHeight = boardRows * CELL_SIZE;
+
+    canvas.style.width = `${displayWidth}px`;
+    canvas.style.height = `${displayHeight}px`;
+    canvas.width = Math.floor(displayWidth * dpr);
+    canvas.height = Math.floor(displayHeight * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    return true;
+}
+
+function resizeCanvas() {
+    const wasGameOver = gameOver;
+    const wasRunning = running;
+    const hadSnake = snake.length > 0;
+
+    if (!setCanvasSize()) return;
+
+    if (!initialized || !hadSnake) {
+        initialized = true;
+        resetGame();
+        return;
+    }
+
+    snake = snake.filter(segment => segment.x >= 0 && segment.y >= 0 && segment.x < boardCols && segment.y < boardRows);
+
+    if (!snake.length) {
+        resetGame();
+        return;
+    }
+
+    spawnFood();
+    draw();
+
+    if (wasGameOver) {
+        gameOver = true;
+        running = false;
+        playPauseBtn.textContent = 'Resume';
+        setStatus('Game Over');
+        draw();
+        return;
+    }
+
+    running = wasRunning;
+    playPauseBtn.textContent = running ? 'Pause' : 'Resume';
+    setStatus(running ? 'Playing' : 'Paused');
 }
 
 function setDirection(newDirection) {
@@ -119,12 +212,14 @@ function stepGame() {
 
     const willEat = nextHead.x === food.x && nextHead.y === food.y;
     const bodyToCheck = willEat ? snake : snake.slice(0, -1);
+
     if (bodyToCheck.some(segment => segment.x === nextHead.x && segment.y === nextHead.y)) {
         endGame();
         return;
     }
 
     snake.unshift(nextHead);
+
     if (willEat) {
         score += 1;
         bestScore = Math.max(bestScore, score);
@@ -140,57 +235,11 @@ function stepGame() {
 function endGame() {
     gameOver = true;
     running = false;
+    bestScore = Math.max(bestScore, score);
     playPauseBtn.textContent = 'Resume';
     setStatus('Game Over');
-    bestScore = Math.max(bestScore, score);
     updateHud();
     draw();
-}
-
-function drawCell(x, y, color) {
-    ctx.fillStyle = color;
-    ctx.fillRect(x * CELL_SIZE + 1, y * CELL_SIZE + 1, CELL_SIZE - 2, CELL_SIZE - 2);
-}
-
-function draw() {
-    const width = boardCols * CELL_SIZE;
-    const height = boardRows * CELL_SIZE;
-
-    ctx.clearRect(0, 0, width, height);
-    ctx.fillStyle = '#ffffff';
-    ctx.fillRect(0, 0, width, height);
-
-    ctx.strokeStyle = 'rgba(148, 163, 184, 0.18)';
-    ctx.lineWidth = 1;
-    for (let x = 0; x <= boardCols; x++) {
-        ctx.beginPath();
-        ctx.moveTo(x * CELL_SIZE + 0.5, 0);
-        ctx.lineTo(x * CELL_SIZE + 0.5, height);
-        ctx.stroke();
-    }
-    for (let y = 0; y <= boardRows; y++) {
-        ctx.beginPath();
-        ctx.moveTo(0, y * CELL_SIZE + 0.5);
-        ctx.lineTo(width, y * CELL_SIZE + 0.5);
-        ctx.stroke();
-    }
-
-    drawCell(food.x, food.y, '#ef4444');
-
-    snake.forEach((segment, index) => {
-        drawCell(segment.x, segment.y, index === 0 ? '#0f172a' : '#334155');
-    });
-
-    if (gameOver) {
-        ctx.fillStyle = 'rgba(15, 23, 42, 0.75)';
-        ctx.fillRect(0, 0, width, height);
-        ctx.fillStyle = '#ffffff';
-        ctx.font = '700 28px system-ui, sans-serif';
-        ctx.textAlign = 'center';
-        ctx.fillText('Game Over', width / 2, height / 2 - 8);
-        ctx.font = '500 16px system-ui, sans-serif';
-        ctx.fillText('Press Restart to play again', width / 2, height / 2 + 22);
-    }
 }
 
 function togglePause() {
@@ -198,6 +247,7 @@ function togglePause() {
         resetGame();
         return;
     }
+
     running = !running;
     playPauseBtn.textContent = running ? 'Pause' : 'Resume';
     setStatus(running ? 'Playing' : 'Paused');
@@ -209,10 +259,7 @@ speedRange.addEventListener('input', () => {
 });
 
 playPauseBtn.addEventListener('click', togglePause);
-restartBtn.addEventListener('click', () => {
-    resetGame();
-});
-
+restartBtn.addEventListener('click', resetGame);
 upBtn.addEventListener('click', () => setDirection({ x: 0, y: -1 }));
 downBtn.addEventListener('click', () => setDirection({ x: 0, y: 1 }));
 leftBtn.addEventListener('click', () => setDirection({ x: -1, y: 0 }));
@@ -220,11 +267,13 @@ rightBtn.addEventListener('click', () => setDirection({ x: 1, y: 0 }));
 
 window.addEventListener('keydown', (event) => {
     const key = event.key.toLowerCase();
+
     if (key === ' ' || key === 'spacebar') {
         event.preventDefault();
         togglePause();
         return;
     }
+
     if (key === 'arrowup' || key === 'w') setDirection({ x: 0, y: -1 });
     if (key === 'arrowdown' || key === 's') setDirection({ x: 0, y: 1 });
     if (key === 'arrowleft' || key === 'a') setDirection({ x: -1, y: 0 });
@@ -240,6 +289,7 @@ function tick(timestamp) {
 
     if (running && !gameOver) {
         accumulator += delta * stepsPerSecond;
+
         while (accumulator >= 1) {
             stepGame();
             accumulator -= 1;
@@ -251,6 +301,12 @@ function tick(timestamp) {
 }
 
 speedValue.textContent = `${stepsPerSecond} steps/s`;
-resizeCanvas();
-resetGame();
-requestAnimationFrame(tick);
+
+window.addEventListener('load', () => {
+    resizeCanvas();
+    if (!initialized) {
+        initialized = true;
+        resetGame();
+    }
+    requestAnimationFrame(tick);
+});

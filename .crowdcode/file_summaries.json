@@ -9,8 +9,8 @@
       "summary": "Full HTML file for the Snake game with score, best score, status, speed control, on-screen direction buttons, and a game canvas."
     },
     "script.js": {
-      "hash": "c131a8f3aae429ad61f9949c78172cb2f4f59b93251bfd94699c6e38bfc092f8",
-      "summary": "Full JavaScript file for the Snake game with movement, food spawning, collision detection, scoring, pause/resume, restart, keyboard controls, and speed adjustment."
+      "hash": "0274b2409e8f5fe10c5b2252e1ed3ec7349297287dcc8e5f1a731288fdb0fddc",
+      "summary": "Full JavaScript file after the fix: initializes after layout is ready, sizes the canvas reliably using its rendered dimensions, preserves game state better on resize, and keeps pause/restart/status behavior working consistently."
     },
     "styles.css": {
       "hash": "ef8cc962274522d9de29181acbed6e23ad17f0b7114ee8cc7d6937b9f6009796",
