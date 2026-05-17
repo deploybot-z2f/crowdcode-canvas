@@ -5,16 +5,16 @@
       "summary": "Markdown style guide defining shadcn-inspired UI rules, forbidding gradients, and giving implementation hints for the coding agent."
     },
     "index.html": {
-      "hash": "e82f9d0cd14fdb50450cadc35a6fac181729a8c205c8db8114b588b8df4d68b5",
-      "summary": "Full Crowdcode landing page updated to align with a cleaner, shadcn-inspired presentation while preserving the existing structure and content."
+      "hash": "8734df1ad668a2bee7d1f92ed97809f4e2e28d178d0ccb5bcf59161cbc3f03ab",
+      "summary": "Full HTML file now renders a Conway's Game of Life simulation with a canvas board, generation and alive counters, speed and zoom controls, play/pause and step controls, plus clear and randomize actions."
     },
     "script.js": {
-      "hash": "20482de31f6651c24a2128d92402c0879af54d32def3002a330a1ac5e2900076",
-      "summary": "JavaScript celebration effect updated to avoid gradients and use solid shadcn-like neutral colors for the button state changes and particles."
+      "hash": "8da59b04cb6791166c7a1418a12eb684ea0474393975cf64b9964c62818618f4",
+      "summary": "Full JavaScript file now implements Conway's Game of Life with a resizable canvas, clickable cell editing, speed control, zoom control, play/pause, single-step, clear, randomize, and automatic stop/restart after 1000 generations."
     },
     "styles.css": {
-      "hash": "7c13355ea64dedd165c02b56a0179197add22fcd541f4c22d2f3dc01271ad6bf",
-      "summary": "Styles rewritten to remove gradients and shift the demo toward a cleaner shadcn-inspired neutral palette with subtle borders and shadows."
+      "hash": "713d8390fcc50c075dc9e7a5621c5e500d9b84a946c8965e6ed30bc773e78109",
+      "summary": "Full stylesheet now provides a clean shadcn-inspired layout for the Game of Life app, including the canvas board, control panel, responsive layout, and accessible button and slider styling."
     }
   }
 }
