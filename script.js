@@ -86,7 +86,7 @@ function draw() {
     drawCell(food.x, food.y, '#ef4444');
 
     snake.forEach((segment, index) => {
-        drawCell(segment.x, segment.y, index === 0 ? '#1d4ed8' : '#3b82f6');
+        drawCell(segment.x, segment.y, index === 0 ? '#15803d' : '#22c55e');
     });
 
     if (gameOver) {
