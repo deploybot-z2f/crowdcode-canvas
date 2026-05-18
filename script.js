@@ -266,10 +266,22 @@ window.addEventListener('keydown', (event) => {
         return;
     }
 
-    if (key === 'arrowup' || key === 'w') setDirection({ x: 0, y: -1 });
-    if (key === 'arrowdown' || key === 's') setDirection({ x: 0, y: 1 });
-    if (key === 'arrowleft' || key === 'a') setDirection({ x: -1, y: 0 });
-    if (key === 'arrowright' || key === 'd') setDirection({ x: 1, y: 0 });
+    if (key === 'arrowup' || key === 'w') {
+        event.preventDefault();
+        setDirection({ x: 0, y: -1 });
+    }
+    if (key === 'arrowdown' || key === 's') {
+        event.preventDefault();
+        setDirection({ x: 0, y: 1 });
+    }
+    if (key === 'arrowleft' || key === 'a') {
+        event.preventDefault();
+        setDirection({ x: -1, y: 0 });
+    }
+    if (key === 'arrowright' || key === 'd') {
+        event.preventDefault();
+        setDirection({ x: 1, y: 0 });
+    }
 });
 
 window.addEventListener('resize', resizeCanvas);
